@@ -1,1 +1,3 @@
-# gohelpers
+# go
+
+Various Go helpers.

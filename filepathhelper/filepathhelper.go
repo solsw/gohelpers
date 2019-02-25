@@ -3,7 +3,7 @@ package filepathhelper
 import (
 	"path/filepath"
 
-	"github.com/vechabus/go/pathhelper"
+	"github.com/solsw/gohelpers/pathhelper"
 )
 
 // BaseNoExt returns the file name of the specified path string without the extension.

@@ -4,7 +4,7 @@ package russian
 import (
 	"fmt"
 
-	"github.com/vechabus/go/mathhelper"
+	"github.com/solsw/gohelpers/mathhelper"
 )
 
 // GrammaticalGender - russian grammatical gender.

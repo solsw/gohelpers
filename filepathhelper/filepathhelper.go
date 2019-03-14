@@ -6,27 +6,49 @@ import (
 	"github.com/solsw/gohelpers/pathhelper"
 )
 
-// BaseNoExt returns the file name of the specified path string without the extension.
-func BaseNoExt(p string) string {
-	if p == "" || p[len(p)-1] == filepath.Separator {
+// NoExt returns path p without extension.
+// If p is empty, empty string is returned. If there is no extension, p is returned.
+func NoExt(p string) string {
+	if p == "" {
 		return ""
 	}
-	b := filepath.Base(p)
-	e := filepath.Ext(b)
+	e := filepath.Ext(p)
 	le := len(e)
 	if le == 0 {
-		return b
+		return p
 	}
-	return b[:len(b)-le]
+	return p[:len(p)-le]
 }
 
-// SplitFilePath splits p (using filepath.Separator as seperator) into directories and filename.
+// BaseNoExt returns filename without extension from path p.
+// If p is empty, empty string is returned. See TestBaseNoExt for usage exanples.
+func BaseNoExt(p string) string {
+	ne := NoExt(p)
+	if ne == "" || ne[len(ne)-1] == filepath.Separator {
+		return ""
+	}
+	return filepath.Base(ne)
+}
+
+// ChangeExt changes extension of path p to ext.
+// If p or ext is empty, p is returned. ext may or may not start with dot.
+func ChangeExt(p, ext string) string {
+	if p == "" || ext == "" || ext == "." {
+		return p
+	}
+	if ext[0] == '.' {
+		return NoExt(p) + ext
+	}
+	return NoExt(p) + "." + ext
+}
+
+// SplitFilePath splits path p (using filepath.Separator as seperator) into directories and filename.
 // (E.g. on Windows "a\b\c.d" is splitted into {"a", "b", "c.d"} slice.)
 func SplitFilePath(p string) []string {
 	return pathhelper.SplitPath(filepath.ToSlash(p))
 }
 
-// StartSeparator ensures, that p starts with filepath.Separator.
+// StartSeparator ensures, that path p starts with filepath.Separator.
 // If p is empty, empty string is returned.
 func StartSeparator(p string) string {
 	if p == "" {
@@ -38,7 +60,7 @@ func StartSeparator(p string) string {
 	return p
 }
 
-// EndSeparator ensures, that p ends with filepath.Separator.
+// EndSeparator ensures, that path p ends with filepath.Separator.
 // If p is empty, empty string is returned.
 func EndSeparator(p string) string {
 	if p == "" {

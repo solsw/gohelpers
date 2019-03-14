@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-// SplitPath splits p (using '/' as seperator) into directories and filename.
+// SplitPath splits path p (using slash as seperator) into directories and filename.
 // (E.g. "a/b/c.d" is splitted into {"a", "b", "c.d"} slice.)
 func SplitPath(p string) []string {
 	t := make([]string, 0)
@@ -25,7 +25,7 @@ func SplitPath(p string) []string {
 	return r
 }
 
-// StartSlash ensures, that p starts with slash.
+// StartSlash ensures, that path p starts with slash.
 // If p is empty, empty string is returned.
 func StartSlash(p string) string {
 	if p == "" {
@@ -37,7 +37,7 @@ func StartSlash(p string) string {
 	return p
 }
 
-// EndSlash ensures, that p ends with slash.
+// EndSlash ensures, that path p ends with slash.
 // If p is empty, empty string is returned.
 func EndSlash(p string) string {
 	if p == "" {

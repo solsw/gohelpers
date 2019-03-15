@@ -6,7 +6,7 @@ import (
 
 func TestIsEven(t *testing.T) {
 	type args struct {
-		i int
+		i int64
 	}
 	tests := []struct {
 		name string

@@ -17,9 +17,9 @@ func TestIntAsMonth(t *testing.T) {
 		want    time.Month
 		wantErr bool
 	}{
-		{name: "1e", args: args{month: 0}, want: month0, wantErr: true},
-		{name: "2e", args: args{month: -23}, want: month0, wantErr: true},
-		{name: "3e", args: args{month: 23}, want: month0, wantErr: true},
+		{name: "1e", args: args{month: 0}, wantErr: true},
+		{name: "2e", args: args{month: -23}, wantErr: true},
+		{name: "3e", args: args{month: 23}, wantErr: true},
 		{name: "1", args: args{month: 6}, want: time.June, wantErr: false},
 	}
 	for _, tt := range tests {
@@ -71,7 +71,7 @@ func TestLastDayOfMonth(t *testing.T) {
 		want    time.Time
 		wantErr bool
 	}{
-		{name: "1e", args: args{year: 2018, month: month0}, want: time0, wantErr: true},
+		{name: "1e", args: args{year: 2018, month: time.Month(0)}, wantErr: true},
 		{name: "1", args: args{year: 2018, month: time.February}, want: dateYMDPrim(2018, time.February, 28), wantErr: false},
 		{name: "2", args: args{year: 2018, month: time.December}, want: dateYMDPrim(2018, time.December, 31), wantErr: false},
 		{name: "3", args: args{year: 2020, month: time.February}, want: dateYMDPrim(2020, time.February, 29), wantErr: false},

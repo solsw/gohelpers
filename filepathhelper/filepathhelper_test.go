@@ -126,7 +126,7 @@ func TestStartSeparator(t *testing.T) {
 		args args
 		want string
 	}{
-		{name: "0", args: args{p: ""}, want: ""},
+		{name: "0", args: args{p: ""}, want: "/"},
 		{name: "1", args: args{p: "a/b/c.d"}, want: "/a/b/c.d"},
 		{name: "2", args: args{p: "/a/b/c.d"}, want: "/a/b/c.d"},
 	}
@@ -148,7 +148,7 @@ func TestEndSeparator(t *testing.T) {
 		args args
 		want string
 	}{
-		{name: "0", args: args{p: ""}, want: ""},
+		{name: "0", args: args{p: ""}, want: "/"},
 		{name: "1", args: args{p: "/a/b/c.d"}, want: "/a/b/c.d/"},
 		{name: "2", args: args{p: "a/b/c.d/"}, want: "a/b/c.d/"},
 	}

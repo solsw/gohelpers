@@ -48,11 +48,11 @@ func SplitFilePath(p string) []string {
 	return pathhelper.SplitPath(filepath.ToSlash(p))
 }
 
-// StartSeparator ensures, that path p starts with filepath.Separator.
-// If p is empty, empty string is returned.
+// StartSeparator returns path p guaranteed to start with filepath.Separator.
+// If p is empty, filepath.Separator is returned.
 func StartSeparator(p string) string {
 	if p == "" {
-		return ""
+		return string(filepath.Separator)
 	}
 	if p[0] != filepath.Separator {
 		return string(filepath.Separator) + p
@@ -60,11 +60,11 @@ func StartSeparator(p string) string {
 	return p
 }
 
-// EndSeparator ensures, that path p ends with filepath.Separator.
-// If p is empty, empty string is returned.
+// EndSeparator returns path p guaranteed to end with filepath.Separator.
+// If p is empty, filepath.Separator is returned.
 func EndSeparator(p string) string {
 	if p == "" {
-		return ""
+		return string(filepath.Separator)
 	}
 	if p[len(p)-1] != filepath.Separator {
 		return p + string(filepath.Separator)

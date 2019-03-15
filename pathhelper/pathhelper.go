@@ -25,11 +25,11 @@ func SplitPath(p string) []string {
 	return r
 }
 
-// StartSlash ensures, that path p starts with slash.
-// If p is empty, empty string is returned.
+// StartSlash returns path p guaranteed to start with slash.
+// If p is empty, slash is returned.
 func StartSlash(p string) string {
 	if p == "" {
-		return ""
+		return "/"
 	}
 	if p[0] != '/' {
 		return string('/') + p
@@ -37,11 +37,11 @@ func StartSlash(p string) string {
 	return p
 }
 
-// EndSlash ensures, that path p ends with slash.
-// If p is empty, empty string is returned.
+// EndSlash returns path p guaranteed to end with slash.
+// If p is empty, slash is returned.
 func EndSlash(p string) string {
 	if p == "" {
-		return ""
+		return "/"
 	}
 	if p[len(p)-1] != '/' {
 		return p + string('/')

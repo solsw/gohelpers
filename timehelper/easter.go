@@ -2,7 +2,7 @@ package timehelper
 
 import "time"
 
-// CatholicEaster returns Gregorian date of catholic Easter.
+// CatholicEaster returns Gregorian date of catholic Easter for 'year'.
 func CatholicEaster(year int) time.Time {
 	// вычисляет month, day для года year григорианского календаря по книге Jean Meeus Astronomical Algorithms
 	// см. http://ru.wikipedia.org/wiki/%D0%9F%D0%B0%D1%81%D1%85%D0%B0%D0%BB%D0%B8%D1%8F
@@ -24,7 +24,7 @@ func CatholicEaster(year int) time.Time {
 	return time.Date(year, time.Month(month), day, 0, 0, 0, 0, time.UTC)
 }
 
-// OrthodoxEaster returns Gregorian date of orthodox Easter.
+// OrthodoxEaster returns Gregorian date of orthodox Easter for 'year'.
 func OrthodoxEaster(year int) time.Time {
 	// вычисляет month, day для года year юлианского календаря по книге Jean Meeus Astronomical Algorithms
 	// см. http://ru.wikipedia.org/wiki/%D0%9F%D0%B0%D1%81%D1%85%D0%B0%D0%BB%D0%B8%D1%8F

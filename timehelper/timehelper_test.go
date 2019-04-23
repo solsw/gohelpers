@@ -7,6 +7,22 @@ import (
 	"time"
 )
 
+func TestTime0(t *testing.T) {
+	tests := []struct {
+		name string
+		want time.Time
+	}{
+		{name: "1", want: time0},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := Time0(); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("Time0() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
 func TestIntAsMonth(t *testing.T) {
 	type args struct {
 		month int
@@ -20,7 +36,7 @@ func TestIntAsMonth(t *testing.T) {
 		{name: "1e", args: args{month: 0}, wantErr: true},
 		{name: "2e", args: args{month: -23}, wantErr: true},
 		{name: "3e", args: args{month: 23}, wantErr: true},
-		{name: "1", args: args{month: 6}, want: time.June, wantErr: false},
+		{name: "1", args: args{month: 6}, want: time.June},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -45,16 +61,45 @@ func TestIsLeapYear(t *testing.T) {
 		args args
 		want bool
 	}{
-		{name: "1", args: args{year: 1800}, want: false},
-		{name: "2", args: args{year: 1900}, want: false},
+		{name: "1", args: args{year: 1800}},
+		{name: "2", args: args{year: 1900}},
 		{name: "3", args: args{year: 2000}, want: true},
-		{name: "4", args: args{year: 2018}, want: false},
+		{name: "4", args: args{year: 2018}},
 		{name: "5", args: args{year: 2020}, want: true},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := IsLeapYear(tt.args.year); got != tt.want {
 				t.Errorf("IsLeapYear() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestFirstDayOfMonth(t *testing.T) {
+	type args struct {
+		year  int
+		month time.Month
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    time.Time
+		wantErr bool
+	}{
+		{name: "1e", args: args{month: 0}, wantErr: true},
+		{name: "2e", args: args{year: 2019, month: 20}, wantErr: true},
+		{name: "1", args: args{year: 2019, month: 4}, want: ymd(2019, time.April, 1)},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := FirstDayOfMonth(tt.args.year, tt.args.month)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("FirstDayOfMonth() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("FirstDayOfMonth() = %v, want %v", got, tt.want)
 			}
 		})
 	}
@@ -72,9 +117,9 @@ func TestLastDayOfMonth(t *testing.T) {
 		wantErr bool
 	}{
 		{name: "1e", args: args{year: 2018, month: time.Month(0)}, wantErr: true},
-		{name: "1", args: args{year: 2018, month: time.February}, want: dateYMDPrim(2018, time.February, 28), wantErr: false},
-		{name: "2", args: args{year: 2018, month: time.December}, want: dateYMDPrim(2018, time.December, 31), wantErr: false},
-		{name: "3", args: args{year: 2020, month: time.February}, want: dateYMDPrim(2020, time.February, 29), wantErr: false},
+		{name: "1", args: args{year: 2018, month: time.February}, want: ymd(2018, time.February, 28)},
+		{name: "2", args: args{year: 2018, month: time.December}, want: ymd(2018, time.December, 31)},
+		{name: "3", args: args{year: 2020, month: time.February}, want: ymd(2020, time.February, 29)},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -101,6 +146,8 @@ func TestDaysInMonth(t *testing.T) {
 		want    int
 		wantErr bool
 	}{
+		{name: "1e", args: args{month: 0}, wantErr: true},
+		{name: "2e", args: args{year: 2019, month: 20}, wantErr: true},
 		{name: "1", args: args{year: 2018, month: time.February}, want: 28},
 		{name: "2", args: args{year: 2020, month: time.February}, want: 29},
 		{name: "3", args: args{year: 2000, month: time.February}, want: 29},
@@ -120,7 +167,7 @@ func TestDaysInMonth(t *testing.T) {
 	}
 }
 
-func TestDateYMDEr(t *testing.T) {
+func TestDateYMD(t *testing.T) {
 	type args struct {
 		year  int
 		month int
@@ -132,25 +179,25 @@ func TestDateYMDEr(t *testing.T) {
 		want    time.Time
 		wantErr bool
 	}{
-		{name: "1e", args: args{year: 2018, month: 40, day: 3}, want: dateYMDPrim(2018, time.April, 2), wantErr: true},
-		{name: "2e", args: args{year: 2018, month: 4, day: 31}, want: dateYMDPrim(2018, time.April, 2), wantErr: true},
-		{name: "1", args: args{year: 2018, month: 4, day: 2}, want: dateYMDPrim(2018, time.April, 2), wantErr: false},
+		{name: "1e", args: args{year: 2018, month: 40, day: 3}, want: ymd(2018, time.April, 2), wantErr: true},
+		{name: "2e", args: args{year: 2018, month: 4, day: 31}, want: ymd(2018, time.April, 2), wantErr: true},
+		{name: "1", args: args{year: 2018, month: 4, day: 2}, want: ymd(2018, time.April, 2), wantErr: false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := DateYMDEr(tt.args.year, tt.args.month, tt.args.day)
+			got, err := DateYMD(tt.args.year, tt.args.month, tt.args.day)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("DateYMDEr() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("DateYMD() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if tt.wantErr {
 				if !got.IsZero() {
-					t.Errorf("DateYMDEr() = %v, want zero Time", got)
+					t.Errorf("DateYMD() = %v, want zero Time", got)
 				}
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("DateYMDEr() = %v, want %v", got, tt.want)
+				t.Errorf("DateYMD() = %v, want %v", got, tt.want)
 			}
 		})
 	}
@@ -167,9 +214,11 @@ func TestFirstWeekdayInYear(t *testing.T) {
 		want    time.Time
 		wantErr bool
 	}{
-		{name: "1e", args: args{year: 2018, weekday: time.Weekday(-123)}, want: time0, wantErr: true},
-		{name: "2e", args: args{year: 2018, weekday: time.Weekday(123)}, want: time0, wantErr: true},
-		{name: "1", args: args{year: 2018, weekday: time.Monday}, want: dateYMDPrim(2018, time.January, 1), wantErr: false},
+		{name: "1e", args: args{year: 2018, weekday: time.Weekday(-123)}, wantErr: true},
+		{name: "2e", args: args{year: 2018, weekday: time.Weekday(123)}, wantErr: true},
+		{name: "1", args: args{year: 2018, weekday: time.Monday}, want: ymd(2018, time.January, 1)},
+		{name: "2", args: args{year: 2019, weekday: time.Tuesday}, want: ymd(2019, time.January, 1)},
+		{name: "3", args: args{year: 2019, weekday: time.Monday}, want: ymd(2019, time.January, 7)},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -197,7 +246,9 @@ func TestTwoFirstWeekdayInYearEqual(t *testing.T) {
 	}{
 		{name: "1e", args: args{year: 2018, weekday: time.Weekday(-123)}, args2: args{year: 2018, weekday: time.Weekday(123)}},
 		{name: "1", args: args{year: 2018, weekday: time.Monday}, args2: args{year: 2018, weekday: time.Monday}},
-		{name: "2", args: args{year: 2020, weekday: time.Friday}, args2: args{year: 2020, weekday: time.Friday}},
+		{name: "2", args: args{year: 2019, weekday: time.Tuesday}, args2: args{year: 2019, weekday: time.Tuesday}},
+		{name: "3", args: args{year: 2019, weekday: time.Monday}, args2: args{year: 2019, weekday: time.Monday}},
+		{name: "4", args: args{year: 2020, weekday: time.Friday}, args2: args{year: 2020, weekday: time.Friday}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -209,6 +260,36 @@ func TestTwoFirstWeekdayInYearEqual(t *testing.T) {
 			}
 			if got != got2 {
 				t.Errorf("FirstWeekdayInYear() = %v, FirstWeekdayInYear2() = %v", got, got2)
+			}
+		})
+	}
+}
+
+func TestWeekdaysInYear(t *testing.T) {
+	type args struct {
+		year    int
+		weekday time.Weekday
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    int
+		wantErr bool
+	}{
+		{name: "1e", args: args{year: 2018, weekday: time.Weekday(-123)}, wantErr: true},
+		{name: "2e", args: args{year: 2018, weekday: time.Weekday(123)}, wantErr: true},
+		{name: "1", args: args{year: 2019, weekday: time.Monday}, want: 52},
+		{name: "2", args: args{year: 2019, weekday: time.Tuesday}, want: 53},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := WeekdaysInYear(tt.args.year, tt.args.weekday)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("WeekdaysInYear() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if got != tt.want {
+				t.Errorf("WeekdaysInYear() = %v, want %v", got, tt.want)
 			}
 		})
 	}
@@ -233,6 +314,68 @@ func TestTwoFridaysInYearEqual(t *testing.T) {
 			got2 := FridaysInYear2(tt.args.year)
 			if got != got2 {
 				t.Errorf("FridaysInYear() = %v, FridaysInYear2() = %v", got, got2)
+			}
+		})
+	}
+}
+
+func TestPrevClosestWeekday(t *testing.T) {
+	type args struct {
+		t       time.Time
+		weekday time.Weekday
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    time.Time
+		wantErr bool
+	}{
+		{name: "1e", args: args{weekday: time.Weekday(-10)}, wantErr: true},
+		{name: "2e", args: args{weekday: time.Weekday(10)}, wantErr: true},
+		{name: "1", args: args{t: ymd(2019, time.April, 22), weekday: time.Monday}, want: ymd(2019, time.April, 22)},
+		{name: "2", args: args{t: ymd(2019, time.April, 27), weekday: time.Monday}, want: ymd(2019, time.April, 22)},
+		{name: "3", args: args{t: ymd(2019, time.April, 22), weekday: time.Wednesday}, want: ymd(2019, time.April, 17)},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := PrevClosestWeekday(tt.args.t, tt.args.weekday)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("PrevClosestWeekday() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("PrevClosestWeekday() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestNextClosestWeekday(t *testing.T) {
+	type args struct {
+		t       time.Time
+		weekday time.Weekday
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    time.Time
+		wantErr bool
+	}{
+		{name: "1e", args: args{weekday: time.Weekday(-10)}, wantErr: true},
+		{name: "2e", args: args{weekday: time.Weekday(10)}, wantErr: true},
+		{name: "1", args: args{t: ymd(2019, time.April, 22), weekday: time.Monday}, want: ymd(2019, time.April, 22)},
+		{name: "2", args: args{t: ymd(2019, time.April, 30), weekday: time.Thursday}, want: ymd(2019, time.May, 2)},
+		{name: "3", args: args{t: ymd(2019, time.April, 27), weekday: time.Thursday}, want: ymd(2019, time.May, 2)},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := NextClosestWeekday(tt.args.t, tt.args.weekday)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("NextClosestWeekday() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("NextClosestWeekday() = %v, want %v", got, tt.want)
 			}
 		})
 	}

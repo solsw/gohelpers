@@ -17,6 +17,8 @@ func TestCatholicEaster(t *testing.T) {
 	}{
 		{name: "1", args: args{year: 2018},
 			want: time.Date(2018, time.April, 1, 0, 0, 0, 0, time.UTC)},
+		{name: "2", args: args{year: 2019},
+			want: time.Date(2019, time.April, 21, 0, 0, 0, 0, time.UTC)},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -38,6 +40,8 @@ func TestOrthodoxEaster(t *testing.T) {
 	}{
 		{name: "1", args: args{year: 2018},
 			want: time.Date(2018, time.April, 8, 0, 0, 0, 0, time.UTC)},
+		{name: "2", args: args{year: 2019},
+			want: time.Date(2019, time.April, 28, 0, 0, 0, 0, time.UTC)},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

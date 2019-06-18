@@ -19,7 +19,8 @@ const (
 	Feminine
 )
 
-// numeralNumberCase - русские число/падеж, используемые с числами.
+// русские число/падеж, используемые с числами.
+// russian number/gender used with numbers
 type numeralNumberCase int
 
 // numeralNumberCase choises

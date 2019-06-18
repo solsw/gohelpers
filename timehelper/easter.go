@@ -1,6 +1,8 @@
 package timehelper
 
-import "time"
+import (
+	"time"
+)
 
 // CatholicEaster returns Gregorian date of catholic Easter for 'year'.
 func CatholicEaster(year int) time.Time {

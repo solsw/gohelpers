@@ -61,10 +61,10 @@ func TestIsLeapYear(t *testing.T) {
 		args args
 		want bool
 	}{
-		{name: "1", args: args{year: 1800}},
-		{name: "2", args: args{year: 1900}},
+		{name: "1", args: args{year: 1800}, want: false},
+		{name: "2", args: args{year: 1900}, want: false},
 		{name: "3", args: args{year: 2000}, want: true},
-		{name: "4", args: args{year: 2018}},
+		{name: "4", args: args{year: 2018}, want: false},
 		{name: "5", args: args{year: 2020}, want: true},
 	}
 	for _, tt := range tests {

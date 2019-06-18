@@ -26,7 +26,7 @@ func FSEntryExists(entryName string) (bool, error) {
 
 // FileExistsFunc checks if the file 'fileName' exists.
 //
-// 'f' (if provided) is used to transform 'fileName' before error returning.
+// 'f' (if not nil) is used to transform 'fileName' before error returning.
 // (E.g. 'f' may extract just file name from full path.)
 func FileExistsFunc(fileName string, f func(string) string) (bool, error) {
 	if len(fileName) == 0 {
@@ -56,7 +56,7 @@ func FileExists(fileName string) (bool, error) {
 
 // DirExistsFunc checks if the directory 'dirName' exists.
 //
-// 'f' (if provided) is used to transform 'dirName' before error returning.
+// 'f' (if not nil) is used to transform 'dirName' before error returning.
 // (E.g. 'f' may shorten excessively long 'dirName'.)
 func DirExistsFunc(dirName string, f func(string) string) (bool, error) {
 	if len(dirName) == 0 {
@@ -85,7 +85,7 @@ func DirExists(dirName string) (bool, error) {
 }
 
 // ExeDir returns an absolute representation of the directory name
-// for the executable that started the current process.
+// of the executable that has started the current process.
 func ExeDir() (string, error) {
 	exe, err := os.Executable()
 	if err != nil {

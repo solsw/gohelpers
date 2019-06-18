@@ -8,10 +8,10 @@ import (
 	"unsafe"
 )
 
-// ConcatEls concatenates the elements into the slice.
+// ConcatEls concatenates elements into the slice.
 func ConcatEls(els ...interface{}) (*[]interface{}, error) {
 	if els == nil {
-		return nil, errors.New("els is nil")
+		return nil, errors.New("'els' is nil")
 	}
 	r := append(make([]interface{}, 0, len(els)), els...)
 	return &r, nil
@@ -20,7 +20,7 @@ func ConcatEls(els ...interface{}) (*[]interface{}, error) {
 // ConcatElSl concatenates the element with the slice.
 func ConcatElSl(el interface{}, sl *[]interface{}) (*[]interface{}, error) {
 	if el == nil && *sl == nil {
-		return nil, errors.New("el and slice are nils")
+		return nil, errors.New("'el' and 'sl' are nils")
 	}
 	if el == nil {
 		return sl, nil
@@ -37,7 +37,7 @@ func ConcatElSl(el interface{}, sl *[]interface{}) (*[]interface{}, error) {
 // ConcatSlEl concatenates the slice with the element.
 func ConcatSlEl(sl *[]interface{}, el interface{}) (*[]interface{}, error) {
 	if *sl == nil && el == nil {
-		return nil, errors.New("slice and el are nils")
+		return nil, errors.New("'sl' and 'el' are nils")
 	}
 	if el == nil {
 		return sl, nil
@@ -51,10 +51,10 @@ func ConcatSlEl(sl *[]interface{}, el interface{}) (*[]interface{}, error) {
 	return &r, nil
 }
 
-// ConcatSlSl concatenates the slice with the slice.
+// ConcatSlSl concatenates two slices.
 func ConcatSlSl(sl1 *[]interface{}, sl2 *[]interface{}) (*[]interface{}, error) {
 	if *sl1 == nil && *sl2 == nil {
-		return nil, errors.New("slices are nils")
+		return nil, errors.New("'sl1' and 'sl2' are nils")
 	}
 	if *sl1 == nil {
 		return sl2, nil
@@ -72,10 +72,10 @@ func ConcatSlSl(sl1 *[]interface{}, sl2 *[]interface{}) (*[]interface{}, error) 
 	return &r, nil
 }
 
-// RemoveAt removes element at idx from the slice.
+// RemoveAt removes element at 'idx' position from the slice returning new slice.
 func RemoveAt(sl *[]interface{}, idx int) (*[]interface{}, error) {
 	if *sl == nil || len(*sl) == 0 {
-		return nil, errors.New("empty slice")
+		return nil, errors.New("'sl' is empty")
 	}
 	if idx < 0 || idx >= len(*sl) {
 		return nil, errors.New("wrong index")
@@ -91,7 +91,7 @@ func RemoveAt(sl *[]interface{}, idx int) (*[]interface{}, error) {
 	return &r, nil
 }
 
-// RemoveAtInPlace removes element at idx from the slice in place.
+// RemoveAtInPlace removes element at 'idx' position from the slice in place.
 func RemoveAtInPlace(sl *[]interface{}, idx int) (*[]interface{}, error) {
 	if *sl == nil || len(*sl) == 0 {
 		return nil, errors.New("empty slice")
@@ -108,8 +108,8 @@ func RemoveAtInPlace(sl *[]interface{}, idx int) (*[]interface{}, error) {
 	return sl, nil
 }
 
-// ShuffleCr shuffles the slice in place using 'crypto/rand' package.
-// Shuffled slice is also returned by the function.
+// ShuffleCr shuffles the slice in place using crypto/rand package.
+// Shuffled slice is returned by the function.
 // ShuffleCr panics (by means of reflect.Swapper), if the provided interface is not a slice.
 func ShuffleCr(sl interface{}) interface{} {
 	sw := reflect.Swapper(sl)

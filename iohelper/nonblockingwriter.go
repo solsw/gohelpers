@@ -1,8 +1,10 @@
 package iohelper
 
-import "io"
+import (
+	"io"
+)
 
-// nonBlockingWriter is an io.WriteCloser that does not block on Write operations.
+// nonBlockingWriter is an io.WriteCloser that does not block on write operations.
 type nonBlockingWriter struct {
 	wr io.Writer
 	bb chan []byte
@@ -11,11 +13,11 @@ type nonBlockingWriter struct {
 
 // Write implements io.Writer interface.
 func (nbw *nonBlockingWriter) Write(b []byte) (n int, err error) {
-	// since the same slice may be passed to this method in separate calls (as e.g. log.Println does),
-	// the current contents of b is copied to new local slice
-	// fmt.Printf("%p\n", b) <- prints same address when NonBlockingWriter is used by log.SetOutput
+	// since the same slice may be passed to this method in separate calls (e.g. as log.Println does),
+	// the current contents of 'b' must be copied to new local slice
+	// (fmt.Printf("%p\n", b) <- prints same address when NonBlockingWriter is used by log.SetOutput)
 	l := make([]byte, len(b))
-	// fmt.Printf("%p\n", l) <- prints different addresses
+	// (fmt.Printf("%p\n", l) <- prints different addresses)
 	copy(l, b)
 	nbw.bb <- l
 	return len(b), nil
@@ -41,7 +43,6 @@ func NonBlockingWriter(w io.Writer, cap int) io.WriteCloser {
 	dn := make(chan bool)
 	go func() {
 		for b := range bb {
-			// time.Sleep(1 * time.Second) <- emulation of time consuming write to w
 			w.Write(b)
 		}
 		dn <- true

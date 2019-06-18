@@ -65,13 +65,13 @@ func nthRunePrim(s string, n uint, strict bool) (rune, error) {
 	return utf8.RuneError, errors.New("n is too large")
 }
 
-// NthRuneStrict returns the n-th (starting with 0) rune from the string.
+// NthRuneStrict returns the 'n'-th (starting with 0) rune from the string.
 // The string must be not empty and valid.
 func NthRuneStrict(s string, n uint) (rune, error) {
 	return nthRunePrim(s, n, true)
 }
 
-// NthRuneAny returns the n-th (starting with 0) rune from the string.
+// NthRuneAny returns the 'n'-th (starting with 0) rune from the string.
 // The string must be not empty, but may be not valid.
 // If the string is invalid and the required rune is situated before an invalid UTF-8 sequence,
 // the rune is returned without error.
@@ -89,7 +89,7 @@ func nthWordFromWords(ww []string, n uint) (string, error) {
 	return ww[n], nil
 }
 
-// NthWord returns the n-th (starting with 0) word from the string.
+// NthWord returns the 'n'-th (starting with 0) word from the string.
 func NthWord(s string, n uint) (string, error) {
 	if len(s) == 0 {
 		return "", ErrEmptyString
@@ -130,22 +130,22 @@ func wordByDelims(s string, n uint, delims []rune, last bool) (string, error) {
 	return nthWordFromWords(ww, n)
 }
 
-// NthWordDelims returns the n-th (starting with 0) word from the string.
-// delims - slice of word dilimeters.
-// If delims is empty, NthWord's result is returned.
+// NthWordDelims returns the 'n'-th (starting with 0) word from the string.
+// 'delims' - slice of word dilimeters.
+// If 'delims' is empty, NthWord's result is returned.
 func NthWordDelims(s string, n uint, delims []rune) (string, error) {
 	return wordByDelims(s, n, delims, false)
 }
 
 // LastWordDelims returns the last word from the string.
-// delims - slice of word dilimeters.
-// If delims is empty, LastWord's result is returned.
+// 'delims' - slice of word dilimeters.
+// If 'delims' is empty, LastWord's result is returned.
 func LastWordDelims(s string, delims []rune) (string, error) {
 	return wordByDelims(s, 0, delims, true)
 }
 
 // SubstrPrim retrieves a substring from the string without error checking.
-// The substring starts at a specified character position and has a specified length.
+// The substring starts at a 'start' character position and has a specified 'length'.
 func SubstrPrim(s string, start, length int) string {
 	if length == 0 {
 		return ""
@@ -156,7 +156,7 @@ func SubstrPrim(s string, start, length int) string {
 }
 
 // Substr retrieves a substring from the string.
-// The substring starts at a specified character position and has a specified length.
+// The substring starts at a 'start' character position and has a specified 'length'.
 func Substr(s string, start, length int) (string, error) {
 	if start < 0 {
 		return "", errors.New("start is less than zero")
@@ -171,7 +171,7 @@ func Substr(s string, start, length int) (string, error) {
 }
 
 // SubstrBeg retrieves a substring from the string.
-// The substring starts at the beginning of the string and has a specified length.
+// The substring starts at the beginning of the string and has a specified 'length'.
 func SubstrBeg(s string, length int) (string, error) {
 	if length > len(s) {
 		return "", errors.New("length is greater than len(s)")
@@ -180,7 +180,7 @@ func SubstrBeg(s string, length int) (string, error) {
 }
 
 // SubstrEnd retrieves a substring from the string.
-// The substring starts at a specified character position and continues to the end of the string.
+// The substring starts at a 'start' character position and continues to the end of the string.
 func SubstrEnd(s string, start int) (string, error) {
 	if start > len(s) {
 		return "", errors.New("start is beyond len(s)")

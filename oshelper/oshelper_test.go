@@ -2,6 +2,8 @@ package oshelper
 
 import (
 	"testing"
+
+	"github.com/solsw/gohelpers/ioutilhelper"
 )
 
 func TestFileExists(t *testing.T) {
@@ -14,7 +16,8 @@ func TestFileExists(t *testing.T) {
 		want    bool
 		wantErr bool
 	}{
-		{name: "1", args: args{fileName: ""}, want: false, wantErr: true},
+		{name: "1e", args: args{fileName: ""}, want: false, wantErr: true},
+		{name: "1", args: args{fileName: ioutilhelper.TempFileName0()}, want: false, wantErr: false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

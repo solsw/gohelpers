@@ -145,7 +145,7 @@ func LastWordDelims(s string, delims []rune) (string, error) {
 }
 
 // SubstrPrim retrieves a substring from the string without error checking.
-// The substring starts at a 'start' character position and has a specified 'length'.
+// The substring starts at a 'start' rune position and has a specified 'length'.
 func SubstrPrim(s string, start, length int) string {
 	if length == 0 {
 		return ""
@@ -156,7 +156,7 @@ func SubstrPrim(s string, start, length int) string {
 }
 
 // Substr retrieves a substring from the string.
-// The substring starts at a 'start' character position and has a specified 'length'.
+// The substring starts at a 'start' rune position and has a specified 'length'.
 func Substr(s string, start, length int) (string, error) {
 	if start < 0 {
 		return "", errors.New("start is less than zero")
@@ -165,7 +165,7 @@ func Substr(s string, start, length int) (string, error) {
 		return "", errors.New("length is less than zero")
 	}
 	if start+length > len(s) {
-		return "", errors.New("start plus length is beyond len(s)")
+		return "", errors.New("start plus length is greater than string length")
 	}
 	return SubstrPrim(s, start, length), nil
 }
@@ -174,13 +174,13 @@ func Substr(s string, start, length int) (string, error) {
 // The substring starts at the beginning of the string and has a specified 'length'.
 func SubstrBeg(s string, length int) (string, error) {
 	if length > len(s) {
-		return "", errors.New("length is greater than len(s)")
+		return "", errors.New("length is greater than string length")
 	}
 	return Substr(s, 0, length)
 }
 
 // SubstrEnd retrieves a substring from the string.
-// The substring starts at a 'start' character position and continues to the end of the string.
+// The substring starts at a 'start' rune position and continues to the end of the string.
 func SubstrEnd(s string, start int) (string, error) {
 	if start > len(s) {
 		return "", errors.New("start is beyond len(s)")

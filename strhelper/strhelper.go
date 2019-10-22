@@ -2,6 +2,7 @@ package strhelper
 
 import (
 	"errors"
+	"sort"
 	"strconv"
 	"strings"
 	"unicode"
@@ -65,7 +66,7 @@ func nthRunePrim(s string, n uint, strict bool) (rune, error) {
 	return utf8.RuneError, errors.New("n is too large")
 }
 
-// NthRuneStrict returns the 'n'-th (starting with 0) rune from the string.
+// NthRuneStrict returns n-th (starting with 0) rune from s.
 // The string must be not empty and valid.
 func NthRuneStrict(s string, n uint) (rune, error) {
 	return nthRunePrim(s, n, true)
@@ -203,4 +204,37 @@ func LastRune(s string) (rune, error) {
 	}
 	rr := []rune(s)
 	return rr[len(rr)-1], nil
+}
+
+// Unique returns unique strings from ss preserving order.
+func Unique(ss []string) []string {
+	if len(ss) < 2 {
+		return ss
+	}
+	var res []string
+	var m = make(map[string]interface{})
+	for _, s := range ss {
+		_, ok := m[s]
+		if !ok {
+			res = append(res, s)
+			m[s] = nil
+		}
+	}
+	return res
+}
+
+// UniqueSorted returns sorted unique strings from ss.
+// (May be up to two times faster than Unique. Subject for benchmarking.)
+func UniqueSorted(ss []string) []string {
+	if len(ss) < 2 {
+		return ss
+	}
+	sort.Strings(ss)
+	res := []string{ss[0]}
+	for i := 1; i < len(ss); i++ {
+		if ss[i] != ss[i-1] {
+			res = append(res, ss[i])
+		}
+	}
+	return res
 }

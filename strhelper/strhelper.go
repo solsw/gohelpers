@@ -238,3 +238,23 @@ func UniqueSorted(ss []string) []string {
 	}
 	return res
 }
+
+// RemoveEscSGR removes SGR escape sequence from string
+// (see https://en.wikipedia.org/wiki/ANSI_escape_code).
+func RemoveEscSGR(s string) string {
+	esc := false
+	return strings.Map(func(r rune) rune {
+		if r == '\x1B' {
+			esc = true
+			return -1
+		} else {
+			if esc {
+				if r == 'm' {
+					esc = false
+				}
+				return -1
+			}
+			return r
+		}
+	}, s)
+}

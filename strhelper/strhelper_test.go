@@ -488,3 +488,28 @@ func BenchmarkUniqueSorted(b *testing.B) {
 		UniqueSorted(ss)
 	}
 }
+
+func TestRemoveEscSGR(t *testing.T) {
+	type args struct {
+		s string
+	}
+	tests := []struct {
+		name string
+		args args
+		want string
+	}{
+		{name: "0", args: args{s: ""}, want: ""},
+		{name: "1", args: args{s: "23"}, want: "23"},
+		{name: "2", args: args{s: "\x1B[36m"}, want: ""},
+		{name: "3", args: args{s: "\x1B[36mINFO"}, want: "INFO"},
+		{name: "4", args: args{s: "\x1B[36mINFO\x1B[0m"}, want: "INFO"},
+		{name: "5", args: args{s: "\x1B[36mINFO\x1B[0m[0000]"}, want: "INFO[0000]"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := RemoveEscSGR(tt.args.s); got != tt.want {
+				t.Errorf("RemoveEscSGR() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

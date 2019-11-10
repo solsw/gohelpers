@@ -13,6 +13,11 @@ func MarshalMust(v interface{}) []byte {
 	return bb
 }
 
+// MarshalIndentDef calls json.MarshalIndent with prefix="" and indent="  ".
+func MarshalIndentDef(v interface{}) ([]byte, error) {
+	return json.MarshalIndent(v, "", "  ")
+}
+
 // MarshalIndentMust calls json.MarshalIndent, but panics in case of error.
 func MarshalIndentMust(v interface{}, prefix, indent string) []byte {
 	bb, err := json.MarshalIndent(v, prefix, indent)
@@ -20,4 +25,9 @@ func MarshalIndentMust(v interface{}, prefix, indent string) []byte {
 		panic(err)
 	}
 	return bb
+}
+
+// MarshalIndentMustDef calls json.MarshalIndent with prefix="" and indent="  ", but panics in case of error.
+func MarshalIndentMustDef(v interface{}) []byte {
+	return MarshalIndentMust(v, "", "  ")
 }

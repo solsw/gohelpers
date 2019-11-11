@@ -4,6 +4,8 @@ import (
 	"io/ioutil"
 	"os"
 	"strings"
+
+	"github.com/solsw/gohelpers/oshelper"
 )
 
 // TempFileName returns filename of a temporary file.
@@ -29,13 +31,12 @@ func TempFileName0() string {
 }
 
 // WriteStrings writes ss to a file named by filename.
-// Each string is followed by '\n' rune.
+// Each string is followed by oshelper.NewLine.
 // (See ioutil.WriteFile for filename and perm usage.)
 func WriteStrings(filename string, ss []string, perm os.FileMode) error {
 	var sb strings.Builder
 	for _, s := range ss {
-		sb.WriteString(s)
-		sb.WriteRune('\n')
+		sb.WriteString(s + oshelper.NewLine)
 	}
 	err := ioutil.WriteFile(filename, []byte(sb.String()), perm)
 	if err != nil {

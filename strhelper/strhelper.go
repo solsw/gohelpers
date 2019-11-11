@@ -7,6 +7,8 @@ import (
 	"strings"
 	"unicode"
 	"unicode/utf8"
+
+	"github.com/solsw/gohelpers/oshelper"
 )
 
 // strhelper-related errors
@@ -257,4 +259,17 @@ func RemoveEscSGR(s string) string {
 			return r
 		}
 	}, s)
+}
+
+// AdjustNewLines replaces end of line sequences ("\r", "\n", "\r\n") with oshelper.NewLine.
+func AdjustNewLines(s string) string {
+	var sb strings.Builder
+	nn := strings.Split(strings.ReplaceAll(s, "\r\n", "\n"), "\n")
+	for _, n := range nn {
+		rr := strings.Split(n, "\r")
+		for _, r := range rr {
+			sb.WriteString(r + oshelper.NewLine)
+		}
+	}
+	return strings.TrimSuffix(sb.String(), oshelper.NewLine)
 }

@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"runtime"
 )
 
 // FSEntryExists checks if the file system entry (file or directory) 'entryName' exists.
@@ -106,13 +105,4 @@ func ExeDir() (string, error) {
 		return "", err
 	}
 	return exeDir, nil
-}
-
-// CallerName returns name of the function that has called CallerName.
-func CallerName() (string, bool) {
-	pc, _, _, ok := runtime.Caller(1)
-	if !ok {
-		return "", false
-	}
-	return runtime.FuncForPC(pc).Name(), true
 }

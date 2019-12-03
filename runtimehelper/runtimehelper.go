@@ -20,7 +20,7 @@ func CallerName() (string, bool) {
 }
 
 // CallerNameMust returns name of the function that called CallerNameMust.
-// In case of any failure empty string is returned.
+// In case of failure empty string is returned.
 func CallerNameMust() string {
 	// do not call CallerName() because it adds another stack frame to the calling stack
 	fn, ok := nthCallerName(2)

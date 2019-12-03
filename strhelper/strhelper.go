@@ -120,8 +120,8 @@ func wordByDelims(s string, n uint, delims []rune, last bool) (string, error) {
 		return NthWord(s, n)
 	}
 	ww := strings.FieldsFunc(s, func(r rune) bool {
-		for _, delim := range delims {
-			if delim == r {
+		for i := range delims {
+			if delims[i] == r {
 				return true
 			}
 		}
@@ -208,18 +208,18 @@ func LastRune(s string) (rune, error) {
 	return rr[len(rr)-1], nil
 }
 
-// Unique returns unique strings from ss preserving order.
+// Unique returns unique strings from 'ss', preserving order of strings in 'ss'.
 func Unique(ss []string) []string {
 	if len(ss) < 2 {
 		return ss
 	}
 	var res []string
 	var m = make(map[string]interface{})
-	for _, s := range ss {
-		_, ok := m[s]
+	for i := range ss {
+		_, ok := m[ss[i]]
 		if !ok {
-			res = append(res, s)
-			m[s] = nil
+			res = append(res, ss[i])
+			m[ss[i]] = nil
 		}
 	}
 	return res
@@ -249,26 +249,25 @@ func RemoveEscSGR(s string) string {
 		if r == '\x1B' {
 			esc = true
 			return -1
-		} else {
-			if esc {
-				if r == 'm' {
-					esc = false
-				}
-				return -1
-			}
-			return r
 		}
+		if esc {
+			if r == 'm' {
+				esc = false
+			}
+			return -1
+		}
+		return r
 	}, s)
 }
 
-// AdjustNewLines replaces end of line sequences ("\r", "\n", "\r\n") with oshelper.NewLine.
+// AdjustNewLines replaces end of line sequences ("\r", "\n", "\r\n") within 's' with oshelper.NewLine.
 func AdjustNewLines(s string) string {
 	var sb strings.Builder
 	nn := strings.Split(strings.ReplaceAll(s, "\r\n", "\n"), "\n")
-	for _, n := range nn {
-		rr := strings.Split(n, "\r")
-		for _, r := range rr {
-			sb.WriteString(r + oshelper.NewLine)
+	for i := range nn {
+		rr := strings.Split(nn[i], "\r")
+		for j := range rr {
+			sb.WriteString(rr[j] + oshelper.NewLine)
 		}
 	}
 	return strings.TrimSuffix(sb.String(), oshelper.NewLine)

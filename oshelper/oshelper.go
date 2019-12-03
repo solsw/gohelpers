@@ -53,9 +53,9 @@ func FileExists(fileName string) (bool, error) {
 	return FileExistsFunc(fileName, nil)
 }
 
-// FileExists0 checks if the file 'fileName' exists.
+// FileExistsMust checks if the file 'fileName' exists.
 // In case of error 'false' is returned.
-func FileExists0(fileName string) bool {
+func FileExistsMust(fileName string) bool {
 	fe, err := FileExists(fileName)
 	if err != nil {
 		return false

@@ -9,7 +9,7 @@ import (
 )
 
 // TempFileName returns filename of a temporary file.
-// (See ioutil.TempFile for dir and pattern usage.)
+// (See ioutil.TempFile for 'dir' and 'pattern' usage.)
 func TempFileName(dir, pattern string) (string, error) {
 	f, err := ioutil.TempFile(dir, pattern)
 	if err != nil {
@@ -20,9 +20,9 @@ func TempFileName(dir, pattern string) (string, error) {
 	return f.Name(), nil
 }
 
-// TempFileName0 returns filename of a temporary file.
-// In case of any error empty string is returned.
-func TempFileName0() string {
+// TempFileNameMust returns filename of a temporary file.
+// In case of error empty string is returned.
+func TempFileNameMust() string {
 	tfn, err := TempFileName("", "")
 	if err != nil {
 		return ""
@@ -30,13 +30,13 @@ func TempFileName0() string {
 	return tfn
 }
 
-// WriteStrings writes ss to a file named by filename.
+// WriteStrings writes 'ss' to a file named by 'filename'.
 // Each string is followed by oshelper.NewLine.
-// (See ioutil.WriteFile for filename and perm usage.)
+// (See ioutil.WriteFile for 'filename' and 'perm' usage.)
 func WriteStrings(filename string, ss []string, perm os.FileMode) error {
 	var sb strings.Builder
-	for _, s := range ss {
-		sb.WriteString(s + oshelper.NewLine)
+	for i := range ss {
+		sb.WriteString(ss[i] + oshelper.NewLine)
 	}
 	err := ioutil.WriteFile(filename, []byte(sb.String()), perm)
 	if err != nil {

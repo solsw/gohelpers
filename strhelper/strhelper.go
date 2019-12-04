@@ -272,3 +272,8 @@ func AdjustNewLines(s string) string {
 	}
 	return strings.TrimSuffix(sb.String(), oshelper.NewLine)
 }
+
+// StringToStrings slices 's' into all substrings separated by end of line sequences ("\r", "\n", "\r\n").
+func StringToStrings(s string) []string {
+	return strings.Split(AdjustNewLines(s), oshelper.NewLine)
+}

@@ -550,3 +550,24 @@ func TestAdjustNewLines(t *testing.T) {
 		})
 	}
 }
+
+func TestStringToStrings(t *testing.T) {
+	type args struct {
+		s string
+	}
+	tests := []struct {
+		name string
+		args args
+		want []string
+	}{
+		{name: "0", args: args{s: ""}, want: []string{""}},
+		{name: "1", args: args{s: "2\r3\r\n4"}, want: []string{"2", "3", "4"}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := StringToStrings(tt.args.s); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("StringToStrings() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

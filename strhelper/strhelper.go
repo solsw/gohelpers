@@ -262,8 +262,8 @@ func RemoveEscSGR(s string) string {
 
 // AdjustNewLines replaces end of line sequences ("\r", "\n", "\r\n") within 's' with oshelper.NewLine.
 func AdjustNewLines(s string) string {
-	var sb strings.Builder
 	nn := strings.Split(strings.ReplaceAll(s, "\r\n", "\n"), "\n")
+	var sb strings.Builder
 	for i := range nn {
 		rr := strings.Split(nn[i], "\r")
 		for j := range rr {
@@ -276,4 +276,15 @@ func AdjustNewLines(s string) string {
 // StringToStrings slices 's' into all substrings separated by end of line sequences ("\r", "\n", "\r\n").
 func StringToStrings(s string) []string {
 	return strings.Split(AdjustNewLines(s), oshelper.NewLine)
+}
+
+// RemoveLastStringIfEmpty removes last string from 'ss' if this string is empty.
+func RemoveLastStringIfEmpty(ss []string) []string {
+	if ss == nil || len(ss) == 0 {
+		return ss
+	}
+	if len(ss[len(ss)-1]) == 0 {
+		return ss[:len(ss)-1]
+	}
+	return ss
 }

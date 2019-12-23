@@ -173,8 +173,7 @@ func Substr(s string, start, length int) (string, error) {
 	return SubstrPrim(s, start, length), nil
 }
 
-// SubstrBeg retrieves a substring from the string.
-// The substring starts at the beginning of the string and has a specified 'length'.
+// SubstrBeg retrieves a substring with length 'length' from the beginning of the string.
 func SubstrBeg(s string, length int) (string, error) {
 	if length > len(s) {
 		return "", errors.New("length is greater than string length")
@@ -182,11 +181,18 @@ func SubstrBeg(s string, length int) (string, error) {
 	return Substr(s, 0, length)
 }
 
-// SubstrEnd retrieves a substring from the string.
-// The substring starts at a 'start' rune position and continues to the end of the string.
-func SubstrEnd(s string, start int) (string, error) {
+// SubstrEnd retrieves a substring with length 'length' from the end of the string.
+func SubstrEnd(s string, length int) (string, error) {
+	if length > len(s) {
+		return "", errors.New("length is greater than string length")
+	}
+	return Substr(s, len(s)-length, length)
+}
+
+// SubstrToEnd retrieves a substring from 'start' rune position and to the end of the string.
+func SubstrToEnd(s string, start int) (string, error) {
 	if start > len(s) {
-		return "", errors.New("start is beyond len(s)")
+		return "", errors.New("start is greater than string length")
 	}
 	return Substr(s, start, len(s)-start)
 }

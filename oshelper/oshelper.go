@@ -93,6 +93,16 @@ func DirExists(dirName string) (bool, error) {
 	return DirExistsFunc(dirName, nil)
 }
 
+// DirExistsMust checks if the directory 'dirName' exists.
+// In case of error 'false' is returned.
+func DirExistsMust(dirName string) bool {
+	de, err := DirExists(dirName)
+	if err != nil {
+		return false
+	}
+	return de
+}
+
 // ExeDir returns an absolute representation of the directory name
 // of the executable that has started the current process.
 func ExeDir() (string, error) {

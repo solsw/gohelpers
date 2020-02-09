@@ -5,90 +5,87 @@ import (
 	"errors"
 	"math/big"
 	"reflect"
+	"sort"
 	"unsafe"
 )
 
-// ConcatEls concatenates elements into the slice.
-func ConcatEls(els ...interface{}) (*[]interface{}, error) {
-	if els == nil {
-		return nil, errors.New("'els' is nil")
-	}
-	r := append(make([]interface{}, 0, len(els)), els...)
-	return &r, nil
+// ConcatElSl returns new slice concatenating the element and the slice.
+func ConcatElSl(el interface{}, sl []interface{}) []interface{} {
+	return append(append(make([]interface{}, 0, 1+len(sl)), el), sl...)
 }
 
-// ConcatElSl concatenates the element with the slice.
-func ConcatElSl(el interface{}, sl *[]interface{}) (*[]interface{}, error) {
-	if el == nil && *sl == nil {
-		return nil, errors.New("'el' and 'sl' are nils")
+// ContainsEqEr checks if 'sl' contains 'el' in sense of 'eq'.
+func ContainsEqEr(sl []interface{}, el interface{}, eq func(interface{}, interface{}) bool) (bool, error) {
+	if eq == nil {
+		return false, errors.New("'eq' is nil")
 	}
-	if el == nil {
-		return sl, nil
+	for _, e := range sl {
+		if eq(e, el) {
+			return true, nil
+		}
 	}
-	var r []interface{}
-	if *sl == nil || len(*sl) == 0 {
-		r = []interface{}{el}
-	} else {
-		r = append(append(make([]interface{}, 0, 1+len(*sl)), el), *sl...)
-	}
-	return &r, nil
+	return false, nil
 }
 
-// ConcatSlEl concatenates the slice with the element.
-func ConcatSlEl(sl *[]interface{}, el interface{}) (*[]interface{}, error) {
-	if *sl == nil && el == nil {
-		return nil, errors.New("'sl' and 'el' are nils")
+// ContainsEq calls ContainsEqEr, but panics in case of error.
+func ContainsEq(sl []interface{}, el interface{}, eq func(interface{}, interface{}) bool) bool {
+	r, err := ContainsEqEr(sl, el, eq)
+	if err != nil {
+		panic(err)
 	}
-	if el == nil {
-		return sl, nil
-	}
-	var r []interface{}
-	if *sl == nil || len(*sl) == 0 {
-		r = []interface{}{el}
-	} else {
-		r = append(*sl, el)
-	}
-	return &r, nil
+	return r
 }
 
-// ConcatSlSl concatenates two slices.
-func ConcatSlSl(sl1 *[]interface{}, sl2 *[]interface{}) (*[]interface{}, error) {
-	if *sl1 == nil && *sl2 == nil {
-		return nil, errors.New("'sl1' and 'sl2' are nils")
+// Contains checks if 'sl' contains 'el' using reflect.DeepEqual as equality comparer.
+func Contains(sl []interface{}, el interface{}) bool {
+	return ContainsEq(sl, el, reflect.DeepEqual)
+}
+
+// ContainsCmpEr checks if *sorted* 'sl' contains 'el' using 'cmp'.
+//
+// 'cmp' compares two elements and returns negative if the first one is less than the second,
+// zero if the first one is equal to the second and positive if the first one is greater than the second.
+func ContainsCmpEr(sl []interface{}, el interface{}, cmp func(interface{}, interface{}) int) (bool, error) {
+	if cmp == nil {
+		return false, errors.New("'cmp' is nil")
 	}
-	if *sl1 == nil {
-		return sl2, nil
+	idx := sort.Search(len(sl), func(i int) bool {
+		return cmp(el, sl[i]) <= 0
+	})
+	if idx == len(sl) {
+		return false, nil
 	}
-	if *sl2 == nil {
-		return sl1, nil
+	return cmp(el, sl[idx]) == 0, nil
+}
+
+// ContainsCmp calls ContainsCmpEr, but panics in case of error.
+func ContainsCmp(sl []interface{}, el interface{}, cmp func(interface{}, interface{}) int) bool {
+	r, err := ContainsCmpEr(sl, el, cmp)
+	if err != nil {
+		panic(err)
 	}
-	if len(*sl1) == 0 {
-		return sl2, nil
-	}
-	if len(*sl2) == 0 {
-		return sl1, nil
-	}
-	r := append(*sl1, *sl2)
-	return &r, nil
+	return r
 }
 
 // RemoveAt removes element at 'idx' position from the slice returning new slice.
-func RemoveAt(sl *[]interface{}, idx int) (*[]interface{}, error) {
-	if *sl == nil || len(*sl) == 0 {
+func RemoveAt(sl []interface{}, idx int) ([]interface{}, error) {
+	if len(sl) == 0 {
 		return nil, errors.New("'sl' is empty")
 	}
-	if idx < 0 || idx >= len(*sl) {
+	if idx < 0 || idx >= len(sl) {
 		return nil, errors.New("wrong index")
 	}
 	var r []interface{}
-	r = make([]interface{}, 0, len(*sl)-1)
-	if idx > 0 { // removing not first element
-		r = append(r, (*sl)[:idx]...)
+	r = make([]interface{}, 0, len(sl)-1)
+	if idx > 0 {
+		// removing not first element
+		r = append(r, sl[:idx]...)
 	}
-	if idx < len(*sl)-1 { // removing not last element
-		r = append(r, (*sl)[idx+1:]...)
+	if idx < len(sl)-1 {
+		// removing not last element
+		r = append(r, sl[idx+1:]...)
 	}
-	return &r, nil
+	return r, nil
 }
 
 // RemoveAtInPlace removes element at 'idx' position from the slice in place.
@@ -108,8 +105,7 @@ func RemoveAtInPlace(sl *[]interface{}, idx int) (*[]interface{}, error) {
 	return sl, nil
 }
 
-// ShuffleCr shuffles the slice in place using crypto/rand package.
-// Shuffled slice is returned by the function.
+// ShuffleCr returns input slice shuffled the in place using crypto/rand package.
 // ShuffleCr panics (by means of reflect.Swapper), if the provided interface is not a slice.
 func ShuffleCr(sl interface{}) interface{} {
 	sw := reflect.Swapper(sl)

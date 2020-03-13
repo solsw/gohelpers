@@ -1,10 +1,15 @@
 package oshelper
 
 import (
+	"io/ioutil"
+	"os"
 	"testing"
 )
 
 func TestFileExists(t *testing.T) {
+	f, _ := ioutil.TempFile("", "")
+	f.Close()
+	defer os.Remove(f.Name())
 	type args struct {
 		fileName string
 	}
@@ -15,7 +20,8 @@ func TestFileExists(t *testing.T) {
 		wantErr bool
 	}{
 		{name: "1e", args: args{fileName: ""}, want: false, wantErr: true},
-		{name: "1", args: args{fileName: "C3043E18D2234F2897BE0BCEBBE0C840"}, want: false, wantErr: false},
+		{name: "1", args: args{fileName: "C3043E18D2234F2897BE0BCEBBE0C840"}, want: false},
+		{name: "2", args: args{fileName: f.Name()}, want: true},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

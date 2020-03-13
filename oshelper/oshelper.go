@@ -25,27 +25,28 @@ func FSEntryExists(entryName string) (bool, error) {
 
 // FileExistsFunc checks if the file 'fileName' exists.
 //
-// 'f' (if not nil) is used to transform 'fileName' before error returning.
+// 'f' (if not nil) is used to transform 'fileName' before own error returning.
 // (E.g. 'f' may extract just file name from full path.)
 func FileExistsFunc(fileName string, f func(string) string) (bool, error) {
 	if len(fileName) == 0 {
 		return false, errors.New("fileName is empty")
 	}
 	fi, err := os.Stat(fileName)
-	if err == nil {
-		if !fi.IsDir() {
-			// it is file
-			return true, nil
+	if err != nil {
+		if os.IsNotExist(err) {
+			return false, nil
 		}
-		if f != nil {
-			fileName = f(fileName)
-		}
-		return false, fmt.Errorf("'%s' is directory, not file", fileName)
+		return false, err
 	}
-	if os.IsNotExist(err) {
-		return false, nil
+	// 'fileName' exists
+	if !fi.IsDir() {
+		// it is file
+		return true, nil
 	}
-	return false, err
+	if f != nil {
+		fileName = f(fileName)
+	}
+	return false, fmt.Errorf("'%s' is directory, not file", fileName)
 }
 
 // FileExists checks if the file 'fileName' exists.
@@ -72,20 +73,21 @@ func DirExistsFunc(dirName string, f func(string) string) (bool, error) {
 		return false, errors.New("dirName is empty")
 	}
 	fi, err := os.Stat(dirName)
-	if err == nil {
-		if fi.IsDir() {
-			// it is directory
-			return true, nil
+	if err != nil {
+		if os.IsNotExist(err) {
+			return false, nil
 		}
-		if f != nil {
-			dirName = f(dirName)
-		}
-		return false, fmt.Errorf("'%s' is file, not directory", dirName)
+		return false, err
 	}
-	if os.IsNotExist(err) {
-		return false, nil
+	// 'dirName' exists
+	if fi.IsDir() {
+		// it is directory
+		return true, nil
 	}
-	return false, err
+	if f != nil {
+		dirName = f(dirName)
+	}
+	return false, fmt.Errorf("'%s' is file, not directory", dirName)
 }
 
 // DirExists checks if the directory 'dirName' exists.

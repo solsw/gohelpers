@@ -1,3 +1,4 @@
+// Package e11hhelper contains Elasticsearch Writer.
 package e11hhelper
 
 import (
@@ -23,12 +24,6 @@ func NewWriter(cfg elasticsearch.Config, idx string) (*Writer, error) {
 	return &Writer{cl: cl, idx: idx}, nil
 }
 
-// Info returns basic information about Elasticsearch cluster
-// (https://www.elastic.co/guide/en/elasticsearch/reference/current/info-api.html).
-func (w *Writer) Info() (*esapi.Response, error) {
-	return w.cl.Info()
-}
-
 // Write implements io.Writer interface.
 func (w *Writer) Write(p []byte) (int, error) {
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-index_.html
@@ -40,7 +35,21 @@ func (w *Writer) Write(p []byte) (int, error) {
 	return len(p), nil
 }
 
-// GetResponse returns last successful esapi.Response.
+// Info returns basic information about Elasticsearch cluster
+// (https://www.elastic.co/guide/en/elasticsearch/reference/current/info-api.html).
+func (w *Writer) Info() (*esapi.Response, error) {
+	return w.cl.Info()
+}
+
+// GetResponse returns last esapi.Response.
 func (w *Writer) GetResponse() *esapi.Response {
 	return w.res
+}
+
+// WriteRes writes 'p' to Elasticsearch and returns esapi.Response.
+func (w *Writer) WriteRes(p []byte) (*esapi.Response, error) {
+	if _, err := w.Write(p); err != nil {
+		return nil, err
+	}
+	return w.res, nil
 }

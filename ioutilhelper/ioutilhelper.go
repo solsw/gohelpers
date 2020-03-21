@@ -1,3 +1,4 @@
+// Package ioutilhelper contains ioutil helper functions.
 package ioutilhelper
 
 import (
@@ -31,7 +32,7 @@ func TempFileNameMust() string {
 	return tfn
 }
 
-// ReadFileStrings reads the file named by 'filename' and returns the contents as []string.
+// ReadFileStrings reads the file 'filename' and returns its contents as []string.
 func ReadFileStrings(filename string) ([]string, error) {
 	f, err := os.Open(filename)
 	if err != nil {
@@ -46,15 +47,15 @@ func ReadFileStrings(filename string) ([]string, error) {
 	return r, s.Err()
 }
 
-// WriteFileStrings writes 'ss' to a file named by 'filename'.
+// WriteFileStrings writes 'ss' to a file 'filename'.
 // Each string is followed by oshelper.NewLine.
 // (See ioutil.WriteFile for 'filename' and 'perm' usage.)
 func WriteFileStrings(filename string, ss []string, perm os.FileMode) error {
-	var sb strings.Builder
+	var b strings.Builder
 	for i := range ss {
-		sb.WriteString(ss[i] + oshelper.NewLine)
+		b.WriteString(ss[i] + oshelper.NewLine)
 	}
-	err := ioutil.WriteFile(filename, []byte(sb.String()), perm)
+	err := ioutil.WriteFile(filename, []byte(b.String()), perm)
 	if err != nil {
 		return err
 	}

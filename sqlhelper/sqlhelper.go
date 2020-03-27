@@ -5,8 +5,12 @@ import (
 )
 
 // StrToNullStr converts string to sql.NullString.
-func StrToNullStr(s string) *sql.NullString {
-	return &sql.NullString{String: s, Valid: true}
+func StrToNullStr(s string, emptyIsNULL bool) *sql.NullString {
+	ns := sql.NullString{String: s}
+	if len(s) > 0 || !emptyIsNULL {
+		ns.Valid = true
+	}
+	return &ns
 }
 
 // NullStrToStr converts sql.NullString to string.

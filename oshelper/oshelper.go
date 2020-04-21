@@ -23,82 +23,82 @@ func EntryExists(entryName string) (bool, error) {
 	return false, err
 }
 
-// FileExistsFunc checks if file 'fileName' exists.
+// FileExistsFunc checks if file 'filename' exists.
 //
-// 'f' (if not nil) is used to transform 'fileName' before own error returning.
+// 'f' (if not nil) is used to transform 'filename' before own error returning.
 // (E.g. 'f' may extract just file name from full path.)
-func FileExistsFunc(fileName string, f func(string) string) (bool, error) {
-	if len(fileName) == 0 {
-		return false, errors.New("fileName is empty")
+func FileExistsFunc(filename string, f func(string) string) (bool, error) {
+	if len(filename) == 0 {
+		return false, errors.New("filename is empty")
 	}
-	fi, err := os.Stat(fileName)
+	fi, err := os.Stat(filename)
 	if err != nil {
 		if os.IsNotExist(err) {
 			return false, nil
 		}
 		return false, err
 	}
-	// 'fileName' exists
-	if !fi.IsDir() {
-		// it is file
+	// 'filename' exists
+	if fi.Mode().IsRegular() {
+		// it is regular file
 		return true, nil
 	}
 	if f != nil {
-		fileName = f(fileName)
+		filename = f(filename)
 	}
-	return false, fmt.Errorf("'%s' is directory, not file", fileName)
+	return false, fmt.Errorf("'%s' is not regular file", filename)
 }
 
-// FileExists checks if file 'fileName' exists.
-func FileExists(fileName string) (bool, error) {
-	return FileExistsFunc(fileName, nil)
+// FileExists checks if file 'filename' exists.
+func FileExists(filename string) (bool, error) {
+	return FileExistsFunc(filename, nil)
 }
 
-// FileExistsMust checks if file 'fileName' exists.
+// FileExistsMust checks if file 'filename' exists.
 // In case of error 'false' is returned.
-func FileExistsMust(fileName string) bool {
-	fe, err := FileExists(fileName)
+func FileExistsMust(filename string) bool {
+	fe, err := FileExists(filename)
 	if err != nil {
 		return false
 	}
 	return fe
 }
 
-// DirExistsFunc checks if directory 'dirName' exists.
+// DirExistsFunc checks if directory 'dirname' exists.
 //
-// 'f' (if not nil) is used to transform 'dirName' before error returning.
-// (E.g. 'f' may shorten excessively long 'dirName'.)
-func DirExistsFunc(dirName string, f func(string) string) (bool, error) {
-	if len(dirName) == 0 {
-		return false, errors.New("dirName is empty")
+// 'f' (if not nil) is used to transform 'dirname' before error returning.
+// (E.g. 'f' may shorten excessively long 'dirname'.)
+func DirExistsFunc(dirname string, f func(string) string) (bool, error) {
+	if len(dirname) == 0 {
+		return false, errors.New("dirname is empty")
 	}
-	fi, err := os.Stat(dirName)
+	fi, err := os.Stat(dirname)
 	if err != nil {
 		if os.IsNotExist(err) {
 			return false, nil
 		}
 		return false, err
 	}
-	// 'dirName' exists
+	// 'dirname' exists
 	if fi.IsDir() {
 		// it is directory
 		return true, nil
 	}
 	if f != nil {
-		dirName = f(dirName)
+		dirname = f(dirname)
 	}
-	return false, fmt.Errorf("'%s' is file, not directory", dirName)
+	return false, fmt.Errorf("'%s' is not directory", dirname)
 }
 
-// DirExists checks if directory 'dirName' exists.
-func DirExists(dirName string) (bool, error) {
-	return DirExistsFunc(dirName, nil)
+// DirExists checks if directory 'dirname' exists.
+func DirExists(dirname string) (bool, error) {
+	return DirExistsFunc(dirname, nil)
 }
 
-// DirExistsMust checks if directory 'dirName' exists.
+// DirExistsMust checks if directory 'dirname' exists.
 // In case of error 'false' is returned.
-func DirExistsMust(dirName string) bool {
-	de, err := DirExists(dirName)
+func DirExistsMust(dirname string) bool {
+	de, err := DirExists(dirname)
 	if err != nil {
 		return false
 	}

@@ -1,4 +1,4 @@
-// Package ioutilhelper contains ioutil helper functions.
+// Package ioutilhelper contains various ioutil helpers.
 package ioutilhelper
 
 import (
@@ -7,7 +7,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/solsw/gohelpers/oshelper"
+	"gitlab.com/solsw/gohelpers/oshelper"
 )
 
 // TempFileName returns filename of a temporary file.

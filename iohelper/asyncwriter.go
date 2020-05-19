@@ -7,11 +7,11 @@ import (
 
 // AsyncWriter implements io.WriteCloser, that does not block on Write call.
 type AsyncWriter struct {
-	wr  io.Writer
-	ch  chan []byte
-	dn  chan struct{}
-	n   int
-	err error
+	wr io.Writer
+	ch chan []byte
+	dn chan struct{}
+	nb int
+	er error
 }
 
 // NewAsyncWriterSizeFunc returns a new AsyncWriter with 'size' capacity of the underlying channel.
@@ -21,13 +21,13 @@ func NewAsyncWriterSizeFunc(w io.Writer, size int, f func([]byte) []byte) *Async
 	go func(aw *AsyncWriter) {
 		defer func() { aw.dn <- struct{}{} }()
 		for bb := range aw.ch {
-			if aw.err != nil {
+			if aw.er != nil {
 				return
 			}
 			if f != nil {
 				bb = f(bb)
 			}
-			aw.n, aw.err = aw.wr.Write(bb)
+			aw.nb, aw.er = aw.wr.Write(bb)
 		}
 	}(&r)
 	return &r
@@ -56,21 +56,21 @@ func NewAsyncWriter(w io.Writer) *AsyncWriter {
 func (aw *AsyncWriter) Write(p []byte) (int, error) {
 	// since the same slice may be passed to this method in separate calls (e.g. as log.Println does),
 	// the current contents of 'p' must be copied to new local slice
-	// (fmt.Printf("%p\n", p) <- prints the same address when AsyncWriter is used by log.SetOutput)
+	// (fmt.Printf("%p\n", p) <- prints the same address when AsyncWriter is passed to log.SetOutput)
 	loc := make([]byte, len(p))
 	// (fmt.Printf("%p\n", loc) <- prints different addresses)
 	copy(loc, p)
 	aw.ch <- loc
-	return len(p), nil
+	return len(loc), nil
 }
 
 // Result returns result of the last Write call on the underlying io.Writer.
 func (aw *AsyncWriter) Result() (int, error) {
-	return aw.n, aw.err
+	return aw.nb, aw.er
 }
 
 // Close closes the underlying channel.
-// Close must be called (typically by defer statement) to wait for the underlying io.Writer to finish writing.
+// Close must be called (typically by "defer" statement) to wait for the underlying io.Writer to finish writing.
 // If the underlying io.Writer is io.Closer, Close calls its Close method
 // and returns corresponding result error, otherwise Close returns nil.
 // Close implements io.Closer interface.

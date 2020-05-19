@@ -6,6 +6,8 @@ import (
 	"time"
 )
 
+var time0 time.Time
+
 func TestJulianToGregorian(t *testing.T) {
 	type args struct {
 		julian time.Time

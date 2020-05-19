@@ -9,7 +9,7 @@ import (
 func JulianToGregorian(julian time.Time) (time.Time, error) {
 	switch {
 	case julian.After(ymd(2400, time.February, 28)):
-		return time0, errors.New("unsupported julian date")
+		return time.Time{}, errors.New("unsupported julian date")
 	case julian.After(ymd(2300, time.February, 28)):
 		return julian.AddDate(0, 0, 16), nil
 	case julian.After(ymd(2200, time.February, 28)):
@@ -29,5 +29,5 @@ func JulianToGregorian(julian time.Time) (time.Time, error) {
 	case julian.After(ymd(1300, time.February, 28)):
 		return julian.AddDate(0, 0, 8), nil
 	}
-	return time0, errors.New("unsupported julian date")
+	return time.Time{}, errors.New("unsupported julian date")
 }

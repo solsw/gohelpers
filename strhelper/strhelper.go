@@ -1,3 +1,4 @@
+// Package strhelper contains various string-related helpers.
 package strhelper
 
 import (
@@ -8,7 +9,7 @@ import (
 	"unicode"
 	"unicode/utf8"
 
-	"github.com/solsw/gohelpers/oshelper"
+	"gitlab.com/solsw/gohelpers/oshelper"
 )
 
 // strhelper-related errors

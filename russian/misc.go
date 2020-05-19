@@ -1,10 +1,9 @@
-// Package russian implements functions to manipulate russian words.
 package russian
 
 import (
 	"fmt"
 
-	"github.com/solsw/gohelpers/mathhelper"
+	"gitlab.com/solsw/gohelpers/mathhelper"
 )
 
 // GrammaticalGender - russian grammatical gender.
@@ -23,7 +22,7 @@ const (
 // russian number/gender used with numbers
 type numeralNumberCase int
 
-// numeralNumberCase choises
+// numeralNumberCase choices
 const (
 	// единственное число, именительный падеж (1, 21 час (но 11 часов))
 	singularNominative numeralNumberCase = iota

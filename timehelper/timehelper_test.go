@@ -7,22 +7,6 @@ import (
 	"time"
 )
 
-func TestTime0(t *testing.T) {
-	tests := []struct {
-		name string
-		want time.Time
-	}{
-		{name: "1", want: time0},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := Time0(); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("Time0() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
 func TestIntAsMonth(t *testing.T) {
 	type args struct {
 		month int

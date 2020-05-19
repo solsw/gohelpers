@@ -1,3 +1,4 @@
+// Package pathhelper contains various path helpers.
 package pathhelper
 
 import (
@@ -8,7 +9,7 @@ import (
 // SplitPath splits path 'p' (using slash as seperator) into directories and filename.
 // (E.g. "a/b/c.d" is splitted into {"a", "b", "c.d"} slice.)
 func SplitPath(p string) []string {
-	t := make([]string, 0)
+	var t []string
 	d := path.Clean(p)
 	for len(d) > 0 {
 		var f string

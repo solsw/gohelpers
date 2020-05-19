@@ -5,31 +5,28 @@ import (
 	"time"
 )
 
-var time0 time.Time
-
-// Time0 returns zero Time.
-func Time0() time.Time {
-	return time0
-}
-
 // IntAsMonth converts int into time.Month with range checking.
 func IntAsMonth(month int) (time.Month, error) {
-	if month < 1 || month > 12 {
+	if !(1 <= month && month <= 12) {
 		return time.Month(0), errors.New("invalid month")
 	}
 	return time.Month(month), nil
 }
 
+func ymd(y int, m time.Month, d int) time.Time {
+	return time.Date(y, m, d, 0, 0, 0, 0, time.UTC)
+}
+
 // IsLeapYear reports whether the 'year' is leap.
 func IsLeapYear(year int) bool {
-	return time.Date(year, time.December, 31, 0, 0, 0, 0, time.UTC).YearDay() == 366
+	return ymd(year, time.December, 31).YearDay() == 366
 }
 
 // FirstDayOfMonth returns the first day of the 'month' of the 'year'.
 func FirstDayOfMonth(year int, month time.Month) (time.Time, error) {
 	_, err := IntAsMonth(int(month))
 	if err != nil {
-		return time0, err
+		return time.Time{}, err
 	}
 	return ymd(year, month, 1), nil
 }
@@ -38,7 +35,7 @@ func FirstDayOfMonth(year int, month time.Month) (time.Time, error) {
 func LastDayOfMonth(year int, month time.Month) (time.Time, error) {
 	_, err := IntAsMonth(int(month))
 	if err != nil {
-		return time0, err
+		return time.Time{}, err
 	}
 	return ymd(year, month+1, 1).AddDate(0, 0, -1), nil
 }
@@ -52,21 +49,16 @@ func DaysInMonth(year int, month time.Month) (int, error) {
 	return t.Day(), nil
 }
 
-// ymd returns Time corresponding to 'year', 'month' and 'day'.
-func ymd(year int, month time.Month, day int) time.Time {
-	return time.Date(year, month, day, 0, 0, 0, 0, time.UTC)
-}
-
-// DateYMD returns Time corresponding to 'year', 'month' and 'day'.
+// DateYMD returns time.Time corresponding to 'year', 'month' and 'day'.
 // If 'year', 'month' and 'day' represent invalid date, error is not nil.
 func DateYMD(year, month, day int) (time.Time, error) {
 	m, err := IntAsMonth(month)
 	if err != nil {
-		return time0, err
+		return time.Time{}, err
 	}
 	d, _ := DaysInMonth(year, m)
 	if day < 1 || day > d {
-		return time0, errors.New("invalid day")
+		return time.Time{}, errors.New("invalid day")
 	}
 	return ymd(year, m, day), nil
 }
@@ -74,7 +66,7 @@ func DateYMD(year, month, day int) (time.Time, error) {
 // FirstWeekdayInYear returns first occurrence of the 'weekday' in the 'year'.
 func FirstWeekdayInYear(year int, weekday time.Weekday) (time.Time, error) {
 	if weekday < time.Sunday || time.Saturday < weekday {
-		return time0, errors.New("invalid weekday")
+		return time.Time{}, errors.New("invalid weekday")
 	}
 	t := ymd(year, time.January, 1)
 	for t.Weekday() != weekday {
@@ -86,7 +78,7 @@ func FirstWeekdayInYear(year int, weekday time.Weekday) (time.Time, error) {
 // FirstWeekdayInYear2 returns first occurrence of the 'weekday' in the 'year'.
 func FirstWeekdayInYear2(year int, weekday time.Weekday) (time.Time, error) {
 	if weekday < time.Sunday || time.Saturday < weekday {
-		return time0, errors.New("invalid weekday")
+		return time.Time{}, errors.New("invalid weekday")
 	}
 	t1 := ymd(year, time.January, 1)
 	d := int(weekday - t1.Weekday())
@@ -131,7 +123,7 @@ func FridaysInYear2(year int) int {
 // PrevClosestWeekday returns date of 'weekday' closest to 't' and not after 't'.
 func PrevClosestWeekday(t time.Time, weekday time.Weekday) (time.Time, error) {
 	if weekday < time.Sunday || weekday > time.Saturday {
-		return time0, errors.New("invalid weekday")
+		return time.Time{}, errors.New("invalid weekday")
 	}
 	d := int(weekday - t.Weekday())
 	if d == 0 {
@@ -146,7 +138,7 @@ func PrevClosestWeekday(t time.Time, weekday time.Weekday) (time.Time, error) {
 // NextClosestWeekday returns date of 'weekday' closest to 't' and not before 't'.
 func NextClosestWeekday(t time.Time, weekday time.Weekday) (time.Time, error) {
 	if weekday < time.Sunday || weekday > time.Saturday {
-		return time0, errors.New("invalid weekday")
+		return time.Time{}, errors.New("invalid weekday")
 	}
 	d := int(weekday - t.Weekday())
 	if d == 0 {

@@ -1,4 +1,3 @@
-// Package oshelper contains os helper functions.
 package oshelper
 
 import (

@@ -1,3 +1,4 @@
+// Package mathhelper contains various math helpers.
 package mathhelper
 
 import (
@@ -17,7 +18,7 @@ func AbsInt(i int64) int64 {
 	return i
 }
 
-// ApproximatelyEquals reports whether two values are equal within provided tolerance.
+// ApproximatelyEquals reports whether two values are equal within provided 'tolerance'.
 func ApproximatelyEquals(value1, value2, tolerance float64) bool {
 	return math.Abs(value1-value2) <= math.Abs(tolerance)
 }

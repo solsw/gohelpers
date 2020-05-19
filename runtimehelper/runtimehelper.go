@@ -1,4 +1,4 @@
-// Package oshelper contains runtime helper functions.
+// Package runtimehelper contains various runtime helpers.
 package runtimehelper
 
 import (

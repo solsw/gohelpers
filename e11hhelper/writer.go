@@ -1,4 +1,3 @@
-// Package e11hhelper contains Elasticsearch Writer.
 package e11hhelper
 
 import (
@@ -8,7 +7,7 @@ import (
 	"github.com/elastic/go-elasticsearch/esapi"
 )
 
-// Writer implements io.Writer interface for writing to Elasticsearch.
+// Writer writes to Elasticsearch index.
 type Writer struct {
 	cl  *elasticsearch.Client
 	idx string
@@ -16,6 +15,7 @@ type Writer struct {
 }
 
 // NewWriter creates new Writer.
+// 'idx' - name of Elasticsearch index to write to.
 func NewWriter(cfg elasticsearch.Config, idx string) (*Writer, error) {
 	cl, err := elasticsearch.NewClient(cfg)
 	if err != nil {
@@ -27,11 +27,11 @@ func NewWriter(cfg elasticsearch.Config, idx string) (*Writer, error) {
 // Write implements io.Writer interface.
 func (w *Writer) Write(p []byte) (int, error) {
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-index_.html
-	r, err := w.cl.Index(w.idx, bytes.NewReader(p))
+	var err error
+	w.res, err = w.cl.Index(w.idx, bytes.NewReader(p))
 	if err != nil {
 		return 0, err
 	}
-	w.res = r
 	return len(p), nil
 }
 

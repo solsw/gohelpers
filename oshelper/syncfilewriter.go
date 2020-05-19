@@ -1,27 +1,26 @@
 package oshelper
 
 import (
-	"io"
 	"os"
 )
 
-// syncFileWriter is a file-based io.Writer that calls Sync on underlying file after every Write call.
-type syncFileWriter struct {
-	file *os.File
+// SyncFileWriter implements file-based io.Writer,
+// that calls Sync on underlying file after every Write call.
+type SyncFileWriter struct {
+	fl *os.File
+}
+
+// NewSyncFileWriter returns a new SyncFileWriter based on file 'f'.
+func NewSyncFileWriter(f *os.File) *SyncFileWriter {
+	return &SyncFileWriter{fl: f}
 }
 
 // Write implements io.Writer interface.
-func (sfw *syncFileWriter) Write(b []byte) (n int, err error) {
-	n, err = sfw.file.Write(b)
+func (sfw *SyncFileWriter) Write(p []byte) (n int, err error) {
+	n, err = sfw.fl.Write(p)
 	if err != nil {
 		return
 	}
-	err = sfw.file.Sync()
+	err = sfw.fl.Sync()
 	return
-}
-
-// SyncFileWriter creates file-based io.Writer
-// that calls Sync on underlying file 'f' after every Write call.
-func SyncFileWriter(f *os.File) io.Writer {
-	return &syncFileWriter{file: f}
 }

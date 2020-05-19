@@ -1,3 +1,4 @@
+// Package sqlhelper contains various database/sql helpers.
 package sqlhelper
 
 import (

@@ -1,9 +1,10 @@
+// Package filepathhelper contains various path/filepath helpers.
 package filepathhelper
 
 import (
 	"path/filepath"
 
-	"github.com/solsw/gohelpers/pathhelper"
+	"gitlab.com/solsw/gohelpers/pathhelper"
 )
 
 // NoExt returns path 'p' without extension.

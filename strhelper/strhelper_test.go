@@ -6,7 +6,7 @@ import (
 	"testing"
 	"unicode/utf8"
 
-	"github.com/solsw/gohelpers/oshelper"
+	"gitlab.com/solsw/gohelpers/oshelper"
 )
 
 func TestIsDigital(t *testing.T) {

@@ -1,3 +1,4 @@
+// Package slicehelper contains various slice-related helpers.
 package slicehelper
 
 import (
@@ -70,7 +71,7 @@ func ContainsCmp(sl []interface{}, el interface{}, cmp func(interface{}, interfa
 // RemoveAt removes element at 'idx' position from the slice returning new slice.
 func RemoveAt(sl []interface{}, idx int) ([]interface{}, error) {
 	if len(sl) == 0 {
-		return nil, errors.New("'sl' is empty")
+		return nil, errors.New("empty slice")
 	}
 	if idx < 0 || idx >= len(sl) {
 		return nil, errors.New("wrong index")

@@ -1,5 +1,5 @@
-// Package strhelper contains various string-related helpers.
-package strhelper
+// Package stringhelper contains various string-related helpers.
+package stringhelper
 
 import (
 	"errors"
@@ -9,10 +9,10 @@ import (
 	"unicode"
 	"unicode/utf8"
 
-	"gitlab.com/solsw/gohelpers/oshelper"
+	"github.com/solsw/gohelpers/oshelper"
 )
 
-// strhelper-related errors
+// stringhelper-related errors
 var (
 	ErrEmptyString   = errors.New("empty string")
 	ErrInvalidString = errors.New("invalid string")

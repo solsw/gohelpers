@@ -1,4 +1,4 @@
-package strhelper
+package stringhelper
 
 import (
 	"math/rand"
@@ -6,7 +6,7 @@ import (
 	"testing"
 	"unicode/utf8"
 
-	"gitlab.com/solsw/gohelpers/oshelper"
+	"github.com/solsw/gohelpers/oshelper"
 )
 
 func TestIsDigital(t *testing.T) {

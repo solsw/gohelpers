@@ -7,7 +7,7 @@ import (
 	"os"
 	"strings"
 
-	"gitlab.com/solsw/gohelpers/oshelper"
+	"github.com/solsw/gohelpers/oshelper"
 )
 
 // TempFileName returns filename of a temporary file.

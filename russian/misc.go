@@ -3,7 +3,7 @@ package russian
 import (
 	"fmt"
 
-	"gitlab.com/solsw/gohelpers/mathhelper"
+	"github.com/solsw/gohelpers/mathhelper"
 )
 
 // GrammaticalGender - russian grammatical gender.

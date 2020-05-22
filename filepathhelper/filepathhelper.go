@@ -4,7 +4,7 @@ package filepathhelper
 import (
 	"path/filepath"
 
-	"gitlab.com/solsw/gohelpers/pathhelper"
+	"github.com/solsw/gohelpers/pathhelper"
 )
 
 // NoExt returns path 'p' without extension.

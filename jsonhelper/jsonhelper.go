@@ -4,6 +4,7 @@ package jsonhelper
 import (
 	"encoding/json"
 	"io"
+	"strings"
 )
 
 // MarshalMust calls json.Marshal, but panics in case of error.
@@ -54,4 +55,19 @@ func Format(r io.Reader, w io.Writer, prefix, indent string) error {
 // FormatDef calls Format with prefix="" and indent="  ".
 func FormatDef(r io.Reader, w io.Writer) error {
 	return Format(r, w, "", "  ")
+}
+
+// FormatStrToStr formats JSON-encoded 'json' to string.
+// (See json.MarshalIndent for 'prefix' and 'indent' usage.)
+func FormatStrToStr(json, prefix, indent string) (string, error) {
+	var b strings.Builder
+	if err := Format(strings.NewReader(json), &b, prefix, indent); err != nil {
+		return "", err
+	}
+	return b.String(), nil
+}
+
+// FormatStrToStrDef calls FormatStrToStr with prefix="" and indent="  ".
+func FormatStrToStrDef(json string) (string, error) {
+	return FormatStrToStr(json, "", "  ")
 }

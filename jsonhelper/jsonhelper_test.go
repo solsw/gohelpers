@@ -1,5 +1,3 @@
-// Package jsonhelper contains various encoding/json helpers.
-
 package jsonhelper
 
 import (
@@ -32,6 +30,26 @@ func TestFormatDef(t *testing.T) {
 			}
 			if gotW := w.String(); gotW != tt.wantW {
 				t.Errorf("FormatDef() = %v, want %v", gotW, tt.wantW)
+			}
+		})
+	}
+}
+
+func TestFormatStrToStrDefMust(t *testing.T) {
+	type args struct {
+		json string
+	}
+	tests := []struct {
+		name string
+		args args
+		want string
+	}{
+		{name: "1", args: args{json: `{"i":1,"s":"string"}`}, want: "{\n  \"i\": 1,\n  \"s\": \"string\"\n}\n"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := FormatStrToStrDefMust(tt.args.json); got != tt.want {
+				t.Errorf("FormatStrToStrDefMust() = %v, want %v", got, tt.want)
 			}
 		})
 	}

@@ -16,11 +16,6 @@ func MarshalMust(v interface{}) []byte {
 	return bb
 }
 
-// MarshalIndentDef calls json.MarshalIndent with prefix="" and indent="  ".
-func MarshalIndentDef(v interface{}) ([]byte, error) {
-	return json.MarshalIndent(v, "", "  ")
-}
-
 // MarshalIndentMust calls json.MarshalIndent, but panics in case of error.
 // (See json.MarshalIndent for 'prefix' and 'indent' usage.)
 func MarshalIndentMust(v interface{}, prefix, indent string) []byte {
@@ -31,8 +26,13 @@ func MarshalIndentMust(v interface{}, prefix, indent string) []byte {
 	return bb
 }
 
-// MarshalIndentMustDef calls json.MarshalIndent with prefix="" and indent="  ", but panics in case of error.
-func MarshalIndentMustDef(v interface{}) []byte {
+// MarshalIndentDef calls json.MarshalIndent with prefix="" and indent="  ".
+func MarshalIndentDef(v interface{}) ([]byte, error) {
+	return json.MarshalIndent(v, "", "  ")
+}
+
+// MarshalIndentDefMust calls MarshalIndentDef, but panics in case of error.
+func MarshalIndentDefMust(v interface{}) []byte {
 	return MarshalIndentMust(v, "", "  ")
 }
 
@@ -67,7 +67,21 @@ func FormatStrToStr(json, prefix, indent string) (string, error) {
 	return b.String(), nil
 }
 
+// FormatStrToStrMust calls FormatStrToStr, but panics in case of error.
+func FormatStrToStrMust(json, prefix, indent string) string {
+	s, err := FormatStrToStr(json, prefix, indent)
+	if err != nil {
+		panic(err)
+	}
+	return s
+}
+
 // FormatStrToStrDef calls FormatStrToStr with prefix="" and indent="  ".
 func FormatStrToStrDef(json string) (string, error) {
 	return FormatStrToStr(json, "", "  ")
+}
+
+// FormatStrToStrDefMust calls FormatStrToStrDef, but panics in case of error.
+func FormatStrToStrDefMust(json string) string {
+	return FormatStrToStrMust(json, "", "  ")
 }

@@ -5,7 +5,7 @@ import (
 	"math"
 )
 
-// IsEven checks if 'i' is even.
+// IsEven reports whether 'i' is even.
 func IsEven(i int64) bool {
 	return (i & 1) == 0
 }

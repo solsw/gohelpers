@@ -48,7 +48,7 @@ func ReadFileStrings(filename string) ([]string, error) {
 }
 
 // WriteFileStrings writes 'ss' to a file 'filename'.
-// Each string is followed by oshelper.NewLine.
+// Each string (including the last one) is followed by oshelper.NewLine.
 // (See ioutil.WriteFile for 'filename' and 'perm' usage.)
 func WriteFileStrings(filename string, ss []string, perm os.FileMode) error {
 	var b strings.Builder

@@ -15,8 +15,8 @@ func ConcatElSl(el interface{}, sl []interface{}) []interface{} {
 	return append(append(make([]interface{}, 0, 1+len(sl)), el), sl...)
 }
 
-// ContainsEqEr checks if 'sl' contains 'el' in sense of 'eq'.
-func ContainsEqEr(sl []interface{}, el interface{}, eq func(interface{}, interface{}) bool) (bool, error) {
+// ContainsEq reports whether 'sl' contains 'el' in sense of 'eq'.
+func ContainsEq(sl []interface{}, el interface{}, eq func(interface{}, interface{}) bool) (bool, error) {
 	if eq == nil {
 		return false, errors.New("'eq' is nil")
 	}
@@ -28,25 +28,26 @@ func ContainsEqEr(sl []interface{}, el interface{}, eq func(interface{}, interfa
 	return false, nil
 }
 
-// ContainsEq calls ContainsEqEr, but panics in case of error.
-func ContainsEq(sl []interface{}, el interface{}, eq func(interface{}, interface{}) bool) bool {
-	r, err := ContainsEqEr(sl, el, eq)
+// ContainsEqMust calls ContainsEq, but panics in case of error.
+func ContainsEqMust(sl []interface{}, el interface{}, eq func(interface{}, interface{}) bool) bool {
+	r, err := ContainsEq(sl, el, eq)
 	if err != nil {
 		panic(err)
 	}
 	return r
 }
 
-// Contains checks if 'sl' contains 'el' using reflect.DeepEqual as equality comparer.
+// Contains reports whether 'sl' contains 'el' using reflect.DeepEqual as equality comparer.
 func Contains(sl []interface{}, el interface{}) bool {
-	return ContainsEq(sl, el, reflect.DeepEqual)
+	r, _ := ContainsEq(sl, el, reflect.DeepEqual)
+	return r
 }
 
-// ContainsCmpEr checks if *sorted* 'sl' contains 'el' using 'cmp'.
+// ContainsCmp reports whether *sorted* 'sl' contains 'el' using 'cmp'.
 //
 // 'cmp' compares two elements and returns negative if the first one is less than the second,
 // zero if the first one is equal to the second and positive if the first one is greater than the second.
-func ContainsCmpEr(sl []interface{}, el interface{}, cmp func(interface{}, interface{}) int) (bool, error) {
+func ContainsCmp(sl []interface{}, el interface{}, cmp func(interface{}, interface{}) int) (bool, error) {
 	if cmp == nil {
 		return false, errors.New("'cmp' is nil")
 	}
@@ -59,9 +60,9 @@ func ContainsCmpEr(sl []interface{}, el interface{}, cmp func(interface{}, inter
 	return cmp(el, sl[idx]) == 0, nil
 }
 
-// ContainsCmp calls ContainsCmpEr, but panics in case of error.
-func ContainsCmp(sl []interface{}, el interface{}, cmp func(interface{}, interface{}) int) bool {
-	r, err := ContainsCmpEr(sl, el, cmp)
+// ContainsCmpMust calls ContainsCmp, but panics in case of error.
+func ContainsCmpMust(sl []interface{}, el interface{}, cmp func(interface{}, interface{}) int) bool {
+	r, err := ContainsCmp(sl, el, cmp)
 	if err != nil {
 		panic(err)
 	}

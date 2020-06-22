@@ -632,3 +632,51 @@ func TestRemoveLastStringIfEmpty(t *testing.T) {
 		})
 	}
 }
+
+func TestIsUpper(t *testing.T) {
+	type args struct {
+		r rune
+	}
+	tests := []struct {
+		name string
+		args args
+		want bool
+	}{
+		{name: "1", args: args{r: 'R'}, want: true},
+		{name: "2", args: args{r: 'z'}, want: false},
+		{name: "3", args: args{r: 'Б'}, want: true},
+		{name: "4", args: args{r: 'г'}, want: false},
+		{name: "5", args: args{r: '0'}, want: true},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := IsUpper(tt.args.r); got != tt.want {
+				t.Errorf("IsUpper() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestIsLower(t *testing.T) {
+	type args struct {
+		r rune
+	}
+	tests := []struct {
+		name string
+		args args
+		want bool
+	}{
+		{name: "1", args: args{r: 'R'}, want: false},
+		{name: "2", args: args{r: 'z'}, want: true},
+		{name: "3", args: args{r: 'Б'}, want: false},
+		{name: "4", args: args{r: 'г'}, want: true},
+		{name: "5", args: args{r: '0'}, want: true},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := IsLower(tt.args.r); got != tt.want {
+				t.Errorf("IsLower() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

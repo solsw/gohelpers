@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 )
 
-// EntryExists checks if file system entry (file or directory) 'entryName' exists.
+// EntryExists reports whether file system entry (file or directory) 'entryName' exists.
 func EntryExists(entryName string) (bool, error) {
 	if len(entryName) == 0 {
 		return false, errors.New("entryName is empty")
@@ -22,7 +22,7 @@ func EntryExists(entryName string) (bool, error) {
 	return false, err
 }
 
-// FileExistsFunc checks if file 'filename' exists.
+// FileExistsFunc reports whether file 'filename' exists.
 //
 // 'f' (if not nil) is used to process 'filename' before own error returning.
 // (E.g. 'f' may extract just file name from full path.)
@@ -48,12 +48,12 @@ func FileExistsFunc(filename string, f func(string) string) (bool, error) {
 	return false, fmt.Errorf("'%s' is not a regular file", filename)
 }
 
-// FileExists checks if file 'filename' exists.
+// FileExists reports whether file 'filename' exists.
 func FileExists(filename string) (bool, error) {
 	return FileExistsFunc(filename, nil)
 }
 
-// FileExistsMust checks if file 'filename' exists.
+// FileExistsMust reports whether file 'filename' exists.
 // In case of error 'false' is returned.
 func FileExistsMust(filename string) bool {
 	fe, err := FileExists(filename)
@@ -63,7 +63,7 @@ func FileExistsMust(filename string) bool {
 	return fe
 }
 
-// DirExistsFunc checks if directory 'dirname' exists.
+// DirExistsFunc reports whether directory 'dirname' exists.
 //
 // 'f' (if not nil) is used to process 'dirname' before own error returning.
 // (E.g. 'f' may shorten excessively long 'dirname'.)
@@ -89,12 +89,12 @@ func DirExistsFunc(dirname string, f func(string) string) (bool, error) {
 	return false, fmt.Errorf("'%s' is not a directory", dirname)
 }
 
-// DirExists checks if directory 'dirname' exists.
+// DirExists reports whether directory 'dirname' exists.
 func DirExists(dirname string) (bool, error) {
 	return DirExistsFunc(dirname, nil)
 }
 
-// DirExistsMust checks if directory 'dirname' exists.
+// DirExistsMust reports whether directory 'dirname' exists.
 // In case of error 'false' is returned.
 func DirExistsMust(dirname string) bool {
 	de, err := DirExists(dirname)

@@ -34,7 +34,7 @@ var eqInt = func(v1, v2 interface{}) bool {
 	return v1.(int) == v2.(int)
 }
 
-func TestContainsEqEr(t *testing.T) {
+func TestContainsEq(t *testing.T) {
 	type args struct {
 		sl []interface{}
 		el interface{}
@@ -57,13 +57,13 @@ func TestContainsEqEr(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := ContainsEqEr(tt.args.sl, tt.args.el, tt.args.eq)
+			got, err := ContainsEq(tt.args.sl, tt.args.el, tt.args.eq)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("ContainsEqEr() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("ContainsEq() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if got != tt.want {
-				t.Errorf("ContainsEqEr() = %v, want %v", got, tt.want)
+				t.Errorf("ContainsEq() = %v, want %v", got, tt.want)
 			}
 		})
 	}
@@ -105,8 +105,8 @@ func TestContainsCmp(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ContainsCmp(tt.args.sl, tt.args.el, tt.args.cmp); got != tt.want {
-				t.Errorf("ContainsCmp() = %v, want %v", got, tt.want)
+			if got := ContainsCmpMust(tt.args.sl, tt.args.el, tt.args.cmp); got != tt.want {
+				t.Errorf("ContainsCmpMust() = %v, want %v", got, tt.want)
 			}
 		})
 	}

@@ -296,14 +296,22 @@ func RemoveLastStringIfEmpty(ss []string) []string {
 	return ss
 }
 
-// IsUpper reports whether 'r' is upper case.
-func IsUpper(r rune) bool {
-	s := string(r)
+// IsUpper reports whether 's' is upper case.
+func IsUpper(s string) bool {
 	return s == strings.ToUpper(s)
 }
 
-// IsLower reports whether 'r' is lower case.
-func IsLower(r rune) bool {
-	s := string(r)
+// IsUpperRune reports whether 'r' is upper case.
+func IsUpperRune(r rune) bool {
+	return IsUpper(string(r))
+}
+
+// IsLower reports whether 's' is lower case.
+func IsLower(s string) bool {
 	return s == strings.ToLower(s)
+}
+
+// IsLowerRune reports whether 'r' is lower case.
+func IsLowerRune(r rune) bool {
+	return IsLower(string(r))
 }

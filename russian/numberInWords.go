@@ -196,10 +196,8 @@ func NumberInWords(number int64, gender GrammaticalGender, withZeros bool) strin
 				}
 				if len(newRes) > 0 && len(res) > 0 {
 					res = newRes + " " + res
-				} else {
-					if len(newRes) > 0 {
-						res = newRes
-					}
+				} else if len(newRes) > 0 {
+					res = newRes
 				}
 			}
 		}

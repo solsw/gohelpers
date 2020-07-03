@@ -20,12 +20,12 @@ var (
 
 // IsEmptyOrWhite reports whether the string is empty or contains only white spaces.
 func IsEmptyOrWhite(s string) bool {
-	return len(strings.TrimSpace(s)) == 0
+	return strings.TrimSpace(s) == ""
 }
 
 // IsDigital reports whether the string consists only of digits.
 func IsDigital(s string) bool {
-	if len(s) == 0 || !utf8.ValidString(s) {
+	if s == "" || !utf8.ValidString(s) {
 		return false
 	}
 	for _, r := range s {
@@ -38,7 +38,7 @@ func IsDigital(s string) bool {
 
 // IsNumeric reports whether the string represents a number.
 func IsNumeric(s string) bool {
-	if len(s) == 0 || !utf8.ValidString(s) {
+	if s == "" || !utf8.ValidString(s) {
 		return false
 	}
 	if utf8.RuneCountInString(s) == 1 {
@@ -50,7 +50,7 @@ func IsNumeric(s string) bool {
 }
 
 func nthRunePrim(s string, n uint, strict bool) (rune, error) {
-	if len(s) == 0 {
+	if s == "" {
 		return utf8.RuneError, ErrEmptyString
 	}
 	if strict && !utf8.ValidString(s) {
@@ -95,7 +95,7 @@ func nthWordFromWords(ww []string, n uint) (string, error) {
 
 // NthWord returns the 'n'-th (starting with 0) word from the string.
 func NthWord(s string, n uint) (string, error) {
-	if len(s) == 0 {
+	if s == "" {
 		return "", ErrEmptyString
 	}
 	return nthWordFromWords(strings.Fields(s), n)
@@ -103,7 +103,7 @@ func NthWord(s string, n uint) (string, error) {
 
 // LastWord returns the last word from the string.
 func LastWord(s string) (string, error) {
-	if len(s) == 0 {
+	if s == "" {
 		return "", ErrEmptyString
 	}
 	ww := strings.Fields(s)
@@ -111,7 +111,7 @@ func LastWord(s string) (string, error) {
 }
 
 func wordByDelims(s string, n uint, delims []rune, last bool) (string, error) {
-	if len(s) == 0 {
+	if s == "" {
 		return "", ErrEmptyString
 	}
 	if len(delims) == 0 {
@@ -200,7 +200,7 @@ func SubstrToEnd(s string, start int) (string, error) {
 
 // LastByte returns the last byte from the string.
 func LastByte(s string) (byte, error) {
-	if len(s) == 0 {
+	if s == "" {
 		return 0, ErrEmptyString
 	}
 	return s[len(s)-1], nil
@@ -208,7 +208,7 @@ func LastByte(s string) (byte, error) {
 
 // LastRune returns the last rune from the string.
 func LastRune(s string) (rune, error) {
-	if len(s) == 0 {
+	if s == "" {
 		return utf8.RuneError, ErrEmptyString
 	}
 	rr := []rune(s)
@@ -287,10 +287,10 @@ func StringToStrings(s string) []string {
 
 // RemoveLastStringIfEmpty removes last string from 'ss' if this string is empty.
 func RemoveLastStringIfEmpty(ss []string) []string {
-	if ss == nil || len(ss) == 0 {
+	if len(ss) == 0 {
 		return ss
 	}
-	if len(ss[len(ss)-1]) == 0 {
+	if ss[len(ss)-1] == "" {
 		return ss[:len(ss)-1]
 	}
 	return ss

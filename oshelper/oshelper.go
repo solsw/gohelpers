@@ -7,27 +7,12 @@ import (
 	"path/filepath"
 )
 
-// EntryExists reports whether file system entry (file or directory) 'entryName' exists.
-func EntryExists(entryName string) (bool, error) {
-	if len(entryName) == 0 {
-		return false, errors.New("entryName is empty")
-	}
-	_, err := os.Stat(entryName)
-	if err == nil {
-		return true, nil
-	}
-	if os.IsNotExist(err) {
-		return false, nil
-	}
-	return false, err
-}
-
-// FileExistsFunc reports whether file 'filename' exists.
+// FileExistsFunc reports whether regular file 'filename' exists.
 //
 // 'f' (if not nil) is used to process 'filename' before own error returning.
 // (E.g. 'f' may extract just file name from full path.)
 func FileExistsFunc(filename string, f func(string) string) (bool, error) {
-	if len(filename) == 0 {
+	if filename == "" {
 		return false, errors.New("filename is empty")
 	}
 	fi, err := os.Stat(filename)
@@ -48,12 +33,12 @@ func FileExistsFunc(filename string, f func(string) string) (bool, error) {
 	return false, fmt.Errorf("'%s' is not a regular file", filename)
 }
 
-// FileExists reports whether file 'filename' exists.
+// FileExists reports whether regular file 'filename' exists.
 func FileExists(filename string) (bool, error) {
 	return FileExistsFunc(filename, nil)
 }
 
-// FileExistsMust reports whether file 'filename' exists.
+// FileExistsMust reports whether regular file 'filename' exists.
 // In case of error 'false' is returned.
 func FileExistsMust(filename string) bool {
 	fe, err := FileExists(filename)
@@ -68,7 +53,7 @@ func FileExistsMust(filename string) bool {
 // 'f' (if not nil) is used to process 'dirname' before own error returning.
 // (E.g. 'f' may shorten excessively long 'dirname'.)
 func DirExistsFunc(dirname string, f func(string) string) (bool, error) {
-	if len(dirname) == 0 {
+	if dirname == "" {
 		return false, errors.New("dirname is empty")
 	}
 	fi, err := os.Stat(dirname)

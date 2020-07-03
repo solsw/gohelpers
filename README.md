@@ -1,3 +1,3 @@
 # gohelpers
 
-Various Go helpers.
+Various Golang helpers.

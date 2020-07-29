@@ -6,19 +6,20 @@ import (
 	"strings"
 )
 
-const nol string = "ноль"
+const (
+	zeroInWords string = "ноль"
+)
 
-func threeDigitNumberInWords(digits3 int64, gender GrammaticalGender) (string, error) {
-	if digits3 < 0 || 999 < digits3 {
-		return "", errors.New("digits3 out of range")
+func digit3InWords(digit3 int64, gender GrammaticalGender) (string, error) {
+	if !(0 <= digit3 && digit3 <= 999) {
+		return "", errors.New("digit3 out of range")
 	}
-	if digits3 == 0 {
-		return nol, nil
+	if digit3 == 0 {
+		return zeroInWords, nil
 	}
-	// digits3 - от 1 до 999
-	ones := digits3 % 10           // number of ones
-	tens := digits3 / 10 % 10      // number of tens
-	hundreds := digits3 / 100 % 10 // number of hundreds
+	ones := digit3 % 10           // number of ones
+	tens := digit3 / 10 % 10      // number of tens
+	hundreds := digit3 / 100 % 10 // number of hundreds
 	var o string
 	if ones > 0 {
 		if tens == 1 {
@@ -146,10 +147,12 @@ const minInt64InWords string = // -9 223 372 036 854 775 808
 "минус девять квинтиллионов двести двадцать три квадриллиона триста семьдесят два триллиона " +
 	"тридцать шесть миллиардов восемьсот пятьдесят четыре миллиона семьсот семьдесят пять тысяч восемьсот восемь"
 
-// NumberInWords returns 'number' represented by russian words.
-func NumberInWords(number int64, gender GrammaticalGender, withZeros bool) string {
+// NumberInWords returns 'number' represented in russian words.
+// If 'withZero' is false, zero 3 digit groupings will be omitted.
+// 'gender' determines russian grammatical gender for ones.
+func NumberInWords(number int64, withZero bool, gender GrammaticalGender) string {
 	if number == 0 {
-		return nol
+		return zeroInWords
 	}
 	// since -math.MinInt64 is out of int64 range
 	if number == math.MinInt64 {
@@ -162,35 +165,35 @@ func NumberInWords(number int64, gender GrammaticalGender, withZeros bool) strin
 		absN = number
 	}
 	var res string
-	var nomerTroyki int
+	var numberOf3 int
 	for absN > 0 {
-		nomerTroyki++
-		digits3 := absN % 1000
-		if digits3 > 0 || (withZeros && digits3 == 0) {
-			if nomerTroyki == 1 {
-				res, _ = threeDigitNumberInWords(digits3, gender)
+		numberOf3++
+		digit3 := absN % 1000
+		if digit3 > 0 || (digit3 == 0 && withZero) {
+			if numberOf3 == 1 {
+				res, _ = digit3InWords(digit3, gender)
 			} else {
 				var newRes string
-				if nomerTroyki == 2 {
-					newRes, _ = threeDigitNumberInWords(digits3, Feminine)
+				if numberOf3 == 2 {
+					newRes, _ = digit3InWords(digit3, Feminine)
 				} else {
-					newRes, _ = threeDigitNumberInWords(digits3, Masculine)
+					newRes, _ = digit3InWords(digit3, Masculine)
 				}
 				if len(newRes) > 0 {
 					var razryad string
-					switch nomerTroyki {
+					switch numberOf3 {
 					case 2:
-						razryad = Thousands(digits3)
+						razryad = Thousands(digit3)
 					case 3:
-						razryad = Millions(digits3)
+						razryad = Millions(digit3)
 					case 4:
-						razryad = Milliards(digits3)
+						razryad = Milliards(digit3)
 					case 5:
-						razryad = Trillions(digits3)
+						razryad = Trillions(digit3)
 					case 6:
-						razryad = Quadrillions(digits3)
+						razryad = Quadrillions(digit3)
 					case 7:
-						razryad = Quintillions(digits3)
+						razryad = Quintillions(digit3)
 					}
 					newRes += " " + razryad
 				}

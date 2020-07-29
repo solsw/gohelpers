@@ -1,47 +1,213 @@
 package russian
 
-func daysByCase(nnc numeralNumberCase) string {
-	switch nnc {
-	case singularNominative:
-		return "день"
-	case singularGenitive:
-		return "дня"
-	case pluralGenitive:
-		return "дней"
-	default:
-		return ""
-	}
+var (
+	centuryNumberCase     = [3]string{"век", "века", "веков"}
+	yearNumberCase        = [3]string{"год", "года", "лет"}
+	monthNumberCase       = [3]string{"месяц", "месяца", "месяцев"}
+	weekNumberCase        = [3]string{"неделя", "недели", "недель"}
+	dayNumberCase         = [3]string{"день", "дня", "дней"}
+	hourNumberCase        = [3]string{"час", "часа", "часов"}
+	minuteNumberCase      = [3]string{"минута", "минуты", "минут"}
+	secondNumberCase      = [3]string{"секунда", "секунды", "секунд"}
+	millisecondNumberCase = [3]string{"миллисекунда", "миллисекунды", "миллисекунд"}
+	microsecondNumberCase = [3]string{"микросекунда", "микросекунды", "микросекунд"}
+	nanosecondNumberCase  = [3]string{"наносекунда", "наносекунды", "наносекунд"}
+)
+
+// Centuries returns russian for "century" corresponding to 'n'.
+func Centuries(n int64) string {
+	return centuryNumberCase[getNumeralNumberCase(n)]
 }
 
-// Days returns russian for "day" corresponding to 'i'.
-func Days(i int64) string {
-	return daysByCase(getNumeralNumberCase(i))
+// NCenturies returns string containing number 'n' and corresponding russian for "century".
+// If 'n' is 0 and 'showZero' is false, empty string is returned.
+func NCenturies(n int64, showZero bool) string {
+	return numberAndItems(n, showZero, Centuries(n))
 }
 
-// NumDays returns string containing number 'i' and russian for "day" corresponding to 'i'.
-func NumDays(i int64, showZero bool) string {
-	return numberAndRussianItems(i, showZero, Days(i))
+// NInWordsCenturies returns string containing number 'n' in russian words and corresponding russian for "century".
+// If 'n' is 0 and 'showZero' is false, empty string is returned.
+// If 'withZero' is false, zero 3 digit groupings will be omitted.
+func NInWordsCenturies(n int64, showZero, withZero bool) string {
+	return numberInWordsAndItems(n, showZero, withZero, Masculine, Centuries(n))
 }
 
-func hoursByCase(nnc numeralNumberCase) string {
-	switch nnc {
-	case singularNominative:
-		return "час"
-	case singularGenitive:
-		return "часа"
-	case pluralGenitive:
-		return "часов"
-	default:
-		return ""
-	}
+// Years returns russian for "year" corresponding to 'n'.
+func Years(n int64) string {
+	return yearNumberCase[getNumeralNumberCase(n)]
 }
 
-// Hours returns russian for "hour" corresponding to 'i'.
-func Hours(i int64) string {
-	return hoursByCase(getNumeralNumberCase(i))
+// NYears returns string containing number 'n' and corresponding russian for "year".
+// If 'n' is 0 and 'showZero' is false, empty string is returned.
+func NYears(n int64, showZero bool) string {
+	return numberAndItems(n, showZero, Years(n))
 }
 
-// NumHours returns string containing number 'i' and russian for "hour" corresponding to 'i'.
-func NumHours(i int64, showZero bool) string {
-	return numberAndRussianItems(i, showZero, Hours(i))
+// NInWordsYears returns string containing number 'n' in russian words and corresponding russian for "year".
+// If 'n' is 0 and 'showZero' is false, empty string is returned.
+// If 'withZero' is false, zero 3 digit groupings will be omitted.
+func NInWordsYears(n int64, showZero, withZero bool) string {
+	return numberInWordsAndItems(n, showZero, withZero, Masculine, Years(n))
+}
+
+// Months returns russian for "month" corresponding to 'n'.
+func Months(n int64) string {
+	return monthNumberCase[getNumeralNumberCase(n)]
+}
+
+// NMonths returns string containing number 'n' and corresponding russian for "month".
+// If 'n' is 0 and 'showZero' is false, empty string is returned.
+func NMonths(n int64, showZero bool) string {
+	return numberAndItems(n, showZero, Months(n))
+}
+
+// NInWordsMonths returns string containing number 'n' in russian words and corresponding russian for "month".
+// If 'n' is 0 and 'showZero' is false, empty string is returned.
+// If 'withZero' is false, zero 3 digit groupings will be omitted.
+func NInWordsMonths(n int64, showZero, withZero bool) string {
+	return numberInWordsAndItems(n, showZero, withZero, Masculine, Months(n))
+}
+
+// Weeks returns russian for "week" corresponding to 'n'.
+func Weeks(n int64) string {
+	return weekNumberCase[getNumeralNumberCase(n)]
+}
+
+// NWeeks returns string containing number 'n' and corresponding russian for "week".
+// If 'n' is 0 and 'showZero' is false, empty string is returned.
+func NWeeks(n int64, showZero bool) string {
+	return numberAndItems(n, showZero, Weeks(n))
+}
+
+// NInWordsWeeks returns string containing number 'n' in russian words and corresponding russian for "week".
+// If 'n' is 0 and 'showZero' is false, empty string is returned.
+// If 'withZero' is false, zero 3 digit groupings will be omitted.
+func NInWordsWeeks(n int64, showZero, withZero bool) string {
+	return numberInWordsAndItems(n, showZero, withZero, Feminine, Weeks(n))
+}
+
+// Days returns russian for "day" corresponding to 'n'.
+func Days(n int64) string {
+	return dayNumberCase[getNumeralNumberCase(n)]
+}
+
+// NDays returns string containing number 'n' and corresponding russian for "day".
+// If 'n' is 0 and 'showZero' is false, empty string is returned.
+func NDays(n int64, showZero bool) string {
+	return numberAndItems(n, showZero, Days(n))
+}
+
+// NInWordsDays returns string containing number 'n' in russian words and corresponding russian for "day".
+// If 'n' is 0 and 'showZero' is false, empty string is returned.
+// If 'withZero' is false, zero 3 digit groupings will be omitted.
+func NInWordsDays(n int64, showZero, withZero bool) string {
+	return numberInWordsAndItems(n, showZero, withZero, Masculine, Days(n))
+}
+
+// Hours returns russian for "hour" corresponding to 'n'.
+func Hours(n int64) string {
+	return hourNumberCase[getNumeralNumberCase(n)]
+}
+
+// NHours returns string containing number 'n' and corresponding russian for "hour".
+// If 'n' is 0 and 'showZero' is false, empty string is returned.
+func NHours(n int64, showZero bool) string {
+	return numberAndItems(n, showZero, Hours(n))
+}
+
+// NInWordsHours returns string containing number 'n' in russian words and corresponding russian for "hour".
+// If 'n' is 0 and 'showZero' is false, empty string is returned.
+// If 'withZero' is false, zero 3 digit groupings will be omitted.
+func NInWordsHours(n int64, showZero, withZero bool) string {
+	return numberInWordsAndItems(n, showZero, withZero, Masculine, Hours(n))
+}
+
+// Minutes returns russian for "minute" corresponding to 'n'.
+func Minutes(n int64) string {
+	return minuteNumberCase[getNumeralNumberCase(n)]
+}
+
+// NMinutes returns string containing number 'n' and corresponding russian for "minute".
+// If 'n' is 0 and 'showZero' is false, empty string is returned.
+func NMinutes(n int64, showZero bool) string {
+	return numberAndItems(n, showZero, Minutes(n))
+}
+
+// NInWordsMinutes returns string containing number 'n' in russian words and corresponding russian for "minute".
+// If 'n' is 0 and 'showZero' is false, empty string is returned.
+// If 'withZero' is false, zero 3 digit groupings will be omitted.
+func NInWordsMinutes(n int64, showZero, withZero bool) string {
+	return numberInWordsAndItems(n, showZero, withZero, Feminine, Minutes(n))
+}
+
+// Seconds returns russian for "second" corresponding to 'n'.
+func Seconds(n int64) string {
+	return secondNumberCase[getNumeralNumberCase(n)]
+}
+
+// NSeconds returns string containing number 'n' and corresponding russian for "second".
+// If 'n' is 0 and 'showZero' is false, empty string is returned.
+func NSeconds(n int64, showZero bool) string {
+	return numberAndItems(n, showZero, Seconds(n))
+}
+
+// NInWordsSeconds returns string containing number 'n' in russian words and corresponding russian for "second".
+// If 'n' is 0 and 'showZero' is false, empty string is returned.
+// If 'withZero' is false, zero 3 digit groupings will be omitted.
+func NInWordsSeconds(n int64, showZero, withZero bool) string {
+	return numberInWordsAndItems(n, showZero, withZero, Feminine, Seconds(n))
+}
+
+// Milliseconds returns russian for "millisecond" corresponding to 'n'.
+func Milliseconds(n int64) string {
+	return millisecondNumberCase[getNumeralNumberCase(n)]
+}
+
+// NMilliseconds returns string containing number 'n' and corresponding russian for "millisecond".
+// If 'n' is 0 and 'showZero' is false, empty string is returned.
+func NMilliseconds(n int64, showZero bool) string {
+	return numberAndItems(n, showZero, Milliseconds(n))
+}
+
+// NInWordsMilliseconds returns string containing number 'n' in russian words and corresponding russian for "millisecond".
+// If 'n' is 0 and 'showZero' is false, empty string is returned.
+// If 'withZero' is false, zero 3 digit groupings will be omitted.
+func NInWordsMilliseconds(n int64, showZero, withZero bool) string {
+	return numberInWordsAndItems(n, showZero, withZero, Feminine, Milliseconds(n))
+}
+
+// Microseconds returns russian for "microsecond" corresponding to 'n'.
+func Microseconds(n int64) string {
+	return microsecondNumberCase[getNumeralNumberCase(n)]
+}
+
+// NMicroseconds returns string containing number 'n' and corresponding russian for "microsecond".
+// If 'n' is 0 and 'showZero' is false, empty string is returned.
+func NMicroseconds(n int64, showZero bool) string {
+	return numberAndItems(n, showZero, Microseconds(n))
+}
+
+// NInWordsMicroseconds returns string containing number 'n' in russian words and corresponding russian for "microsecond".
+// If 'n' is 0 and 'showZero' is false, empty string is returned.
+// If 'withZero' is false, zero 3 digit groupings will be omitted.
+func NInWordsMicroseconds(n int64, showZero, withZero bool) string {
+	return numberInWordsAndItems(n, showZero, withZero, Feminine, Microseconds(n))
+}
+
+// Nanoseconds returns russian for "nanosecond" corresponding to 'n'.
+func Nanoseconds(n int64) string {
+	return nanosecondNumberCase[getNumeralNumberCase(n)]
+}
+
+// NNanoseconds returns string containing number 'n' and corresponding russian for "nanosecond".
+// If 'n' is 0 and 'showZero' is false, empty string is returned.
+func NNanoseconds(n int64, showZero bool) string {
+	return numberAndItems(n, showZero, Nanoseconds(n))
+}
+
+// NInWordsNanoseconds returns string containing number 'n' in russian words and corresponding russian for "nanosecond".
+// If 'n' is 0 and 'showZero' is false, empty string is returned.
+// If 'withZero' is false, zero 3 digit groupings will be omitted.
+func NInWordsNanoseconds(n int64, showZero, withZero bool) string {
+	return numberInWordsAndItems(n, showZero, withZero, Feminine, Nanoseconds(n))
 }

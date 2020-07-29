@@ -1,47 +1,28 @@
 package russian
 
-func rublesByCase(nnc numeralNumberCase) string {
-	switch nnc {
-	case singularNominative:
-		return "рубль"
-	case singularGenitive:
-		return "рубля"
-	case pluralGenitive:
-		return "рублей"
-	default:
-		return ""
-	}
+var (
+	rublesByCase  = [3]string{"рубль", "рубля", "рублей"}
+	kopecksByCase = [3]string{"копейка", "копейки", "копеек"}
+)
+
+// Rubles returns russian for "ruble" corresponding to 'n'.
+func Rubles(n int64) string {
+	return rublesByCase[getNumeralNumberCase(n)]
 }
 
-// Rubles returns russian for "ruble" corresponding to 'amount'.
-func Rubles(amount int64) string {
-	return rublesByCase(getNumeralNumberCase(amount))
+// NRubles returns string containing number 'n' and corresponding russian for "ruble".
+// If 'n' is 0 and 'showZero' is false, empty string is returned.
+func NRubles(n int64, showZero bool) string {
+	return numberAndItems(n, showZero, Rubles(n))
 }
 
-// NumRubles returns string containing number 'amount' and russian for "ruble" corresponding to 'amount'.
-func NumRubles(amount int64, showZero bool) string {
-	return numberAndRussianItems(amount, showZero, Rubles(amount))
+// Kopecks returns russian for "kopeck" corresponding to 'n'.
+func Kopecks(n int64) string {
+	return kopecksByCase[getNumeralNumberCase(n)]
 }
 
-func kopecksByCase(nnc numeralNumberCase) string {
-	switch nnc {
-	case singularNominative:
-		return "копейка"
-	case singularGenitive:
-		return "копейки"
-	case pluralGenitive:
-		return "копеек"
-	default:
-		return ""
-	}
-}
-
-// Kopecks returns russian for "kopeck" corresponding to 'amount'.
-func Kopecks(amount int64) string {
-	return kopecksByCase(getNumeralNumberCase(amount))
-}
-
-// NumKopecks returns string containing number 'amount' and russian for "kopeck" corresponding to 'amount'.
-func NumKopecks(amount int64, showZero bool) string {
-	return numberAndRussianItems(amount, showZero, Kopecks(amount))
+// NKopecks returns string containing number 'n' and corresponding russian for "kopeck".
+// If 'n' is 0 and 'showZero' is false, empty string is returned.
+func NKopecks(n int64, showZero bool) string {
+	return numberAndItems(n, showZero, Kopecks(n))
 }

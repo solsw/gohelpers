@@ -1,115 +1,89 @@
 package russian
 
-func thousandsByCase(nnc numeralNumberCase) string {
-	switch nnc {
-	case singularNominative:
-		return "тысяча"
-	case singularGenitive:
-		return "тысячи"
-	case pluralGenitive:
-		return "тысяч"
-	default:
-		return ""
-	}
+var (
+	thousandNumberCase    = [3]string{"тысяча", "тысячи", "тысяч"}
+	millionNumberCase     = [3]string{"миллион", "миллиона", "миллионов"}
+	milliardNumberCase    = [3]string{"миллиард", "миллиарда", "миллиардов"}
+	trillionNumberCase    = [3]string{"триллион", "триллиона", "триллионов"}
+	quadrillionNumberCase = [3]string{"квадриллион", "квадриллиона", "квадриллионов"}
+	quintillionNumberCase = [3]string{"квинтиллион", "квинтиллиона", "квинтиллионов"}
+)
+
+// Thousands returns russian for "thousand" corresponding to 'n'.
+func Thousands(n int64) string {
+	return thousandNumberCase[getNumeralNumberCase(n)]
 }
 
-// Thousands returns russian for "thousand" corresponding to 'i'.
-func Thousands(i int64) string {
-	return thousandsByCase(getNumeralNumberCase(i))
+// NThousands returns string containing number 'n' and corresponding russian for "thousand".
+// If 'n' is 0 and 'showZero' is false, empty string is returned.
+func NThousands(n int64, showZero bool) string {
+	return NumberAndItems(n, showZero, Thousands(n))
 }
 
-func millionsByCase(nnc numeralNumberCase) string {
-	switch nnc {
-	case singularNominative:
-		return "миллион"
-	case singularGenitive:
-		return "миллиона"
-	case pluralGenitive:
-		return "миллионов"
-	default:
-		return ""
-	}
+// Millions returns russian for "million" corresponding to 'n'.
+func Millions(n int64) string {
+	return millionNumberCase[getNumeralNumberCase(n)]
 }
 
-// Millions returns russian for "million" corresponding to 'i'.
-func Millions(i int64) string {
-	return millionsByCase(getNumeralNumberCase(i))
+// NMillions returns string containing number 'n' and corresponding russian for "million".
+// If 'n' is 0 and 'showZero' is false, empty string is returned.
+func NMillions(n int64, showZero bool) string {
+	return NumberAndItems(n, showZero, Millions(n))
 }
 
-func milliardsByCase(nnc numeralNumberCase) string {
-	switch nnc {
-	case singularNominative:
-		return "миллиард"
-	case singularGenitive:
-		return "миллиарда"
-	case pluralGenitive:
-		return "миллиардов"
-	default:
-		return ""
-	}
+// Milliards returns russian for "milliard" corresponding to 'n'.
+func Milliards(n int64) string {
+	return milliardNumberCase[getNumeralNumberCase(n)]
 }
 
-// Milliards returns russian for "milliard" corresponding to 'i'.
-func Milliards(i int64) string {
-	return milliardsByCase(getNumeralNumberCase(i))
+// NMilliards returns string containing number 'n' and corresponding russian for "milliard".
+// If 'n' is 0 and 'showZero' is false, empty string is returned.
+func NMilliards(n int64, showZero bool) string {
+	return NumberAndItems(n, showZero, Milliards(n))
 }
 
-// Billions returns russian for "milliard" corresponding to 'i'.
-// (Billion in russian is called milliard.)
-func Billions(i int64) string {
-	return Milliards(i)
+// Billions returns russian for "milliard" corresponding to 'n'.
+// (There is no "billion" in russian.)
+func Billions(n int64) string {
+	return Milliards(n)
 }
 
-func trillionsByCase(nnc numeralNumberCase) string {
-	switch nnc {
-	case singularNominative:
-		return "триллион"
-	case singularGenitive:
-		return "триллиона"
-	case pluralGenitive:
-		return "триллионов"
-	default:
-		return ""
-	}
+// NBillions returns string containing number 'n' and corresponding russian for "milliard".
+// (There is no "billion" in russian.)
+// If 'n' is 0 and 'showZero' is false, empty string is returned.
+func NBillions(n int64, showZero bool) string {
+	return NumberAndItems(n, showZero, Billions(n))
 }
 
-// Trillions returns russian for "trillion" corresponding to 'i'.
-func Trillions(i int64) string {
-	return trillionsByCase(getNumeralNumberCase(i))
+// Trillions returns russian for "trillion" corresponding to 'n'.
+func Trillions(n int64) string {
+	return trillionNumberCase[getNumeralNumberCase(n)]
 }
 
-func quadrillionsByCase(nnc numeralNumberCase) string {
-	switch nnc {
-	case singularNominative:
-		return "квадриллион"
-	case singularGenitive:
-		return "квадриллиона"
-	case pluralGenitive:
-		return "квадриллионов"
-	default:
-		return ""
-	}
+// NTrillions returns string containing number 'n' and corresponding russian for "trillion".
+// If 'n' is 0 and 'showZero' is false, empty string is returned.
+func NTrillions(n int64, showZero bool) string {
+	return NumberAndItems(n, showZero, Trillions(n))
 }
 
-// Quadrillions returns russian for "quadrillion" corresponding to 'i'.
-func Quadrillions(i int64) string {
-	return quadrillionsByCase(getNumeralNumberCase(i))
+// Quadrillions returns russian for "quadrillion" corresponding to 'n'.
+func Quadrillions(n int64) string {
+	return quadrillionNumberCase[getNumeralNumberCase(n)]
 }
 
-func quintillionsByCase(nnc numeralNumberCase) string {
-	switch nnc {
-	case singularNominative:
-		return "квинтиллион"
-	case singularGenitive:
-		return "квинтиллиона"
-	case pluralGenitive:
-		return "квинтиллионов"
-	default:
-		return ""
-	}
+// NQuadrillions returns string containing number 'n' and corresponding russian for "quadrillion".
+// If 'n' is 0 and 'showZero' is false, empty string is returned.
+func NQuadrillions(n int64, showZero bool) string {
+	return NumberAndItems(n, showZero, Quadrillions(n))
 }
 
-// Quintillions returns russian for "quintillion" corresponding to 'i'.
-func Quintillions(i int64) string {
-	return quintillionsByCase(getNumeralNumberCase(i))
+// Quintillions returns russian for "quintillion" corresponding to 'n'.
+func Quintillions(n int64) string {
+	return quintillionNumberCase[getNumeralNumberCase(n)]
+}
+
+// NQuintillions returns string containing number 'n' and corresponding russian for "quintillion".
+// If 'n' is 0 and 'showZero' is false, empty string is returned.
+func NQuintillions(n int64, showZero bool) string {
+	return NumberAndItems(n, showZero, Quintillions(n))
 }

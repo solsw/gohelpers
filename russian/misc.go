@@ -48,28 +48,33 @@ func getNumeralNumberCasePrim(last2 int64) numeralNumberCase {
 	}
 	// depends on one last digit now
 	// теперь определяется одной последней цифрой
-	last1 := last2 % 10
-	if last1 == 1 {
+	switch last2 % 10 {
+	case 1:
 		return singularNominative
-	}
-	if last1 == 2 || last1 == 3 || last1 == 4 {
+	case 2, 3, 4:
 		return singularGenitive
+	default:
+		return pluralGenitive
 	}
-	return pluralGenitive
 }
 
-func getNumeralNumberCase(i int64) numeralNumberCase {
-	return getNumeralNumberCasePrim(mathhelper.AbsInt(i) % 100)
+func getNumeralNumberCase(n int64) numeralNumberCase {
+	return getNumeralNumberCasePrim(mathhelper.AbsInt(n) % 100)
 }
 
-func numberAndItems(n int64, showZero bool, items string) string {
+// NumberAndItems returns string containing number 'n' and 'items'.
+// If 'n' is 0 and 'showZero' is false, empty string is returned.
+func NumberAndItems(n int64, showZero bool, items string) string {
 	if n == 0 && !showZero {
 		return ""
 	}
 	return fmt.Sprintf("%d %s", n, items)
 }
 
-func numberInWordsAndItems(n int64, showZero, withZero bool, gender GrammaticalGender, items string) string {
+// NumberInWordsAndItems returns string containing number 'n' in russian words and 'items'.
+// If 'n' is 0 and 'showZero' is false, empty string is returned.
+// If 'withZero' is false, zero triples will be omitted.
+func NumberInWordsAndItems(n int64, showZero, withZero bool, gender GrammaticalGender, items string) string {
 	if n == 0 && !showZero {
 		return ""
 	}

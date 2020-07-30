@@ -4,22 +4,24 @@ import (
 	"errors"
 	"math"
 	"strings"
+
+	"github.com/solsw/gohelpers/mathhelper"
 )
 
 const (
 	zeroInWords string = "ноль"
 )
 
-func digit3InWords(digit3 int64, gender GrammaticalGender) (string, error) {
-	if !(0 <= digit3 && digit3 <= 999) {
-		return "", errors.New("digit3 out of range")
+func tripleInWords(triple int64, gender GrammaticalGender) (string, error) {
+	if !(0 <= triple && triple <= 999) {
+		return "", errors.New("triple out of range")
 	}
-	if digit3 == 0 {
+	if triple == 0 {
 		return zeroInWords, nil
 	}
-	ones := digit3 % 10           // number of ones
-	tens := digit3 / 10 % 10      // number of tens
-	hundreds := digit3 / 100 % 10 // number of hundreds
+	ones := triple % 10           // number of ones
+	tens := triple / 10 % 10      // number of tens
+	hundreds := triple / 100 % 10 // number of hundreds
 	var o string
 	if ones > 0 {
 		if tens == 1 {
@@ -46,19 +48,19 @@ func digit3InWords(digit3 int64, gender GrammaticalGender) (string, error) {
 		} else { // tens != 1
 			switch ones {
 			case 1:
-				if gender == Masculine {
+				switch gender {
+				case Neuter:
+					o = "одно"
+				case Masculine:
 					o = "один"
-				} else {
-					if gender == Feminine {
-						o = "одна"
-					} else {
-						o = "одно"
-					}
+				case Feminine:
+					o = "одна"
 				}
 			case 2:
-				if gender == Feminine {
+				switch gender {
+				case Feminine:
 					o = "две"
-				} else {
+				default:
 					o = "два"
 				}
 			case 3:
@@ -77,7 +79,7 @@ func digit3InWords(digit3 int64, gender GrammaticalGender) (string, error) {
 				o = "девять"
 			}
 		}
-	} // if ones > 0 {
+	} // if ones > 0
 	var t string
 	if (tens > 1) || ((tens == 1) && (ones == 0)) {
 		switch tens {
@@ -100,7 +102,7 @@ func digit3InWords(digit3 int64, gender GrammaticalGender) (string, error) {
 		case 9:
 			t = "девянoсто"
 		}
-	} //
+	} // if (tens > 1) || ((tens == 1) && (ones == 0))
 	var h string
 	if hundreds > 0 {
 		switch hundreds {
@@ -123,7 +125,7 @@ func digit3InWords(digit3 int64, gender GrammaticalGender) (string, error) {
 		case 9:
 			h = "девятьсот"
 		}
-	} // if hundreds > 0 {
+	} // if hundreds > 0
 	var sb strings.Builder
 	if len(h) > 0 {
 		sb.WriteString(h)
@@ -148,7 +150,7 @@ const minInt64InWords string = // -9 223 372 036 854 775 808
 	"тридцать шесть миллиардов восемьсот пятьдесят четыре миллиона семьсот семьдесят пять тысяч восемьсот восемь"
 
 // NumberInWords returns 'number' represented in russian words.
-// If 'withZero' is false, zero 3 digit groupings will be omitted.
+// If 'withZero' is false, zero triples will be omitted.
 // 'gender' determines russian grammatical gender for ones.
 func NumberInWords(number int64, withZero bool, gender GrammaticalGender) string {
 	if number == 0 {
@@ -158,49 +160,44 @@ func NumberInWords(number int64, withZero bool, gender GrammaticalGender) string
 	if number == math.MinInt64 {
 		return minInt64InWords
 	}
-	var absN int64
-	if number < 0 {
-		absN = -number
-	} else {
-		absN = number
-	}
+	absN := mathhelper.AbsInt(number)
 	var res string
-	var numberOf3 int
+	var tripleNumber int
 	for absN > 0 {
-		numberOf3++
-		digit3 := absN % 1000
-		if digit3 > 0 || (digit3 == 0 && withZero) {
-			if numberOf3 == 1 {
-				res, _ = digit3InWords(digit3, gender)
+		tripleNumber++
+		triple := absN % 1000
+		if triple > 0 || (triple == 0 && withZero) {
+			if tripleNumber == 1 {
+				res, _ = tripleInWords(triple, gender)
 			} else {
 				var newRes string
-				if numberOf3 == 2 {
-					newRes, _ = digit3InWords(digit3, Feminine)
+				if tripleNumber == 2 {
+					newRes, _ = tripleInWords(triple, Feminine)
 				} else {
-					newRes, _ = digit3InWords(digit3, Masculine)
+					newRes, _ = tripleInWords(triple, Masculine)
 				}
 				if len(newRes) > 0 {
-					var razryad string
-					switch numberOf3 {
+					var rank string
+					switch tripleNumber {
 					case 2:
-						razryad = Thousands(digit3)
+						rank = Thousands(triple)
 					case 3:
-						razryad = Millions(digit3)
+						rank = Millions(triple)
 					case 4:
-						razryad = Milliards(digit3)
+						rank = Milliards(triple)
 					case 5:
-						razryad = Trillions(digit3)
+						rank = Trillions(triple)
 					case 6:
-						razryad = Quadrillions(digit3)
+						rank = Quadrillions(triple)
 					case 7:
-						razryad = Quintillions(digit3)
+						rank = Quintillions(triple)
 					}
-					newRes += " " + razryad
-				}
-				if len(newRes) > 0 && len(res) > 0 {
-					res = newRes + " " + res
-				} else if len(newRes) > 0 {
-					res = newRes
+					newRes += " " + rank
+					if len(res) > 0 {
+						res = newRes + " " + res
+					} else {
+						res = newRes
+					}
 				}
 			}
 		}

@@ -18,7 +18,7 @@ func AbsInt(i int64) int64 {
 	return i
 }
 
-// ApproximatelyEquals reports whether two values are equal within provided 'tolerance'.
-func ApproximatelyEquals(value1, value2, tolerance float64) bool {
-	return math.Abs(value1-value2) <= math.Abs(tolerance)
+// ApproximatelyEquals reports whether two float64 values are equal within the provided 'tolerance'.
+func ApproximatelyEquals(v1, v2, tolerance float64) bool {
+	return math.Abs(v1-v2) <= math.Abs(tolerance)
 }

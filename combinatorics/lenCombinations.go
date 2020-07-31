@@ -27,7 +27,7 @@ func makeInnermostRound() *round {
 	}}
 }
 
-func makeNewRound(delta int) *round {
+func makeRound(delta int) *round {
 	return &round{action: func(selfRound *round) {
 		var resultPartPrev = make([]int, len(_resultPart))
 		copy(resultPartPrev, _resultPart)
@@ -55,13 +55,13 @@ func LenCombinations(arrLen, combLen int) [][]int {
 	// clear possible previous content of results
 	_resultFull = nil
 	_resultPart = nil
-	chain := makeInnermostRound()
-	for i := 0; i < combLen-1; i++ {
-		newRound := makeNewRound(i + 1)
-		newRound.inner = chain
-		chain.outer = newRound
-		chain = newRound
+	currentRound := makeInnermostRound()
+	for i := 1; i < combLen; i++ {
+		newRound := makeRound(i)
+		currentRound.outer = newRound
+		newRound.inner = currentRound
+		currentRound = newRound
 	}
-	chain.action(chain)
+	currentRound.action(currentRound)
 	return _resultFull
 }

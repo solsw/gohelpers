@@ -62,21 +62,21 @@ func getNumeralNumberCase(n int64) numeralNumberCase {
 	return getNumeralNumberCasePrim(mathhelper.AbsInt(n) % 100)
 }
 
-// NumberAndItems returns string containing number 'n' and 'items'.
+// IntAndItems returns string containing 'n' and 'items'.
 // If 'n' is 0 and 'showZero' is false, empty string is returned.
-func NumberAndItems(n int64, showZero bool, items string) string {
+func IntAndItems(n int64, showZero bool, items string) string {
 	if n == 0 && !showZero {
 		return ""
 	}
 	return fmt.Sprintf("%d %s", n, items)
 }
 
-// NumberInWordsAndItems returns string containing number 'n' in russian words and 'items'.
+// IntInWordsAndItems returns string containing 'n' in russian words and 'items'.
 // If 'n' is 0 and 'showZero' is false, empty string is returned.
-// If 'withZero' is false, zero triples will be omitted.
-func NumberInWordsAndItems(n int64, showZero, withZero bool, gender GrammaticalGender, items string) string {
+// If 'withZero' is false, zero triples are omitted.
+func IntInWordsAndItems(n int64, showZero, withZero bool, gender GrammaticalGender, items string) string {
 	if n == 0 && !showZero {
 		return ""
 	}
-	return NumberInWords(n, withZero, gender) + " " + items
+	return IntInWords(n, withZero, gender) + " " + items
 }

@@ -102,3 +102,13 @@ func ExeDir() (string, error) {
 	}
 	return exeDir, nil
 }
+
+// GetenvDef retrieves the value of the environment variable named by the 'key'.
+// If the value is empty 'def' is returned.
+func GetenvDef(key, def string) string {
+	r := os.Getenv(key)
+	if len(r) == 0 {
+		return def
+	}
+	return r
+}

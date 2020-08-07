@@ -14,10 +14,10 @@ func Thousands(n int64) string {
 	return thousandNumberCase[getNumeralNumberCase(n)]
 }
 
-// NThousands returns string containing number 'n' and corresponding russian for "thousand".
+// NThousands returns string containing 'n' and corresponding russian for "thousand".
 // If 'n' is 0 and 'showZero' is false, empty string is returned.
 func NThousands(n int64, showZero bool) string {
-	return NumberAndItems(n, showZero, Thousands(n))
+	return IntAndItems(n, showZero, Thousands(n))
 }
 
 // Millions returns russian for "million" corresponding to 'n'.
@@ -25,10 +25,10 @@ func Millions(n int64) string {
 	return millionNumberCase[getNumeralNumberCase(n)]
 }
 
-// NMillions returns string containing number 'n' and corresponding russian for "million".
+// NMillions returns string containing 'n' and corresponding russian for "million".
 // If 'n' is 0 and 'showZero' is false, empty string is returned.
 func NMillions(n int64, showZero bool) string {
-	return NumberAndItems(n, showZero, Millions(n))
+	return IntAndItems(n, showZero, Millions(n))
 }
 
 // Milliards returns russian for "milliard" corresponding to 'n'.
@@ -36,10 +36,10 @@ func Milliards(n int64) string {
 	return milliardNumberCase[getNumeralNumberCase(n)]
 }
 
-// NMilliards returns string containing number 'n' and corresponding russian for "milliard".
+// NMilliards returns string containing 'n' and corresponding russian for "milliard".
 // If 'n' is 0 and 'showZero' is false, empty string is returned.
 func NMilliards(n int64, showZero bool) string {
-	return NumberAndItems(n, showZero, Milliards(n))
+	return IntAndItems(n, showZero, Milliards(n))
 }
 
 // Billions returns russian for "milliard" corresponding to 'n'.
@@ -48,11 +48,11 @@ func Billions(n int64) string {
 	return Milliards(n)
 }
 
-// NBillions returns string containing number 'n' and corresponding russian for "milliard".
+// NBillions returns string containing 'n' and corresponding russian for "milliard".
 // (There is no "billion" in russian.)
 // If 'n' is 0 and 'showZero' is false, empty string is returned.
 func NBillions(n int64, showZero bool) string {
-	return NumberAndItems(n, showZero, Billions(n))
+	return IntAndItems(n, showZero, Billions(n))
 }
 
 // Trillions returns russian for "trillion" corresponding to 'n'.
@@ -60,10 +60,10 @@ func Trillions(n int64) string {
 	return trillionNumberCase[getNumeralNumberCase(n)]
 }
 
-// NTrillions returns string containing number 'n' and corresponding russian for "trillion".
+// NTrillions returns string containing 'n' and corresponding russian for "trillion".
 // If 'n' is 0 and 'showZero' is false, empty string is returned.
 func NTrillions(n int64, showZero bool) string {
-	return NumberAndItems(n, showZero, Trillions(n))
+	return IntAndItems(n, showZero, Trillions(n))
 }
 
 // Quadrillions returns russian for "quadrillion" corresponding to 'n'.
@@ -71,10 +71,10 @@ func Quadrillions(n int64) string {
 	return quadrillionNumberCase[getNumeralNumberCase(n)]
 }
 
-// NQuadrillions returns string containing number 'n' and corresponding russian for "quadrillion".
+// NQuadrillions returns string containing 'n' and corresponding russian for "quadrillion".
 // If 'n' is 0 and 'showZero' is false, empty string is returned.
 func NQuadrillions(n int64, showZero bool) string {
-	return NumberAndItems(n, showZero, Quadrillions(n))
+	return IntAndItems(n, showZero, Quadrillions(n))
 }
 
 // Quintillions returns russian for "quintillion" corresponding to 'n'.
@@ -82,8 +82,8 @@ func Quintillions(n int64) string {
 	return quintillionNumberCase[getNumeralNumberCase(n)]
 }
 
-// NQuintillions returns string containing number 'n' and corresponding russian for "quintillion".
+// NQuintillions returns string containing 'n' and corresponding russian for "quintillion".
 // If 'n' is 0 and 'showZero' is false, empty string is returned.
 func NQuintillions(n int64, showZero bool) string {
-	return NumberAndItems(n, showZero, Quintillions(n))
+	return IntAndItems(n, showZero, Quintillions(n))
 }

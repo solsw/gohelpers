@@ -149,18 +149,18 @@ const minInt64InWords string = // -9 223 372 036 854 775 808
 "минус девять квинтиллионов двести двадцать три квадриллиона триста семьдесят два триллиона " +
 	"тридцать шесть миллиардов восемьсот пятьдесят четыре миллиона семьсот семьдесят пять тысяч восемьсот восемь"
 
-// NumberInWords returns 'number' represented in russian words.
-// If 'withZero' is false, zero triples will be omitted.
+// IntInWords returns 'n' represented in russian words.
+// If 'withZero' is false, zero triples are omitted.
 // 'gender' determines russian grammatical gender for ones.
-func NumberInWords(number int64, withZero bool, gender GrammaticalGender) string {
-	if number == 0 {
+func IntInWords(n int64, withZero bool, gender GrammaticalGender) string {
+	if n == 0 {
 		return zeroInWords
 	}
 	// since -math.MinInt64 is out of int64 range
-	if number == math.MinInt64 {
+	if n == math.MinInt64 {
 		return minInt64InWords
 	}
-	absN := mathhelper.AbsInt(number)
+	absN := mathhelper.AbsInt(n)
 	var res string
 	var tripleNumber int
 	for absN > 0 {
@@ -203,7 +203,7 @@ func NumberInWords(number int64, withZero bool, gender GrammaticalGender) string
 		}
 		absN /= 1000
 	}
-	if number < 0 {
+	if n < 0 {
 		return "минус " + res
 	}
 	return res

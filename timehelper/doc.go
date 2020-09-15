@@ -1,2 +1,2 @@
-// Package timehelper contains various time helpers.
+// Package timehelper contains time helpers.
 package timehelper

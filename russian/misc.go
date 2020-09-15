@@ -59,7 +59,7 @@ func getNumeralNumberCasePrim(last2 int64) numeralNumberCase {
 }
 
 func getNumeralNumberCase(n int64) numeralNumberCase {
-	return getNumeralNumberCasePrim(mathhelper.AbsInt(n) % 100)
+	return getNumeralNumberCasePrim(mathhelper.AbsInt64(n) % 100)
 }
 
 // IntAndItems returns string containing 'n' and 'items'.

@@ -1,4 +1,4 @@
-// Package sendgridhelper contains various SendGrid (https://github.com/sendgrid/sendgrid-go) helpers.
+// Package sendgridhelper contains SendGrid (https://github.com/sendgrid/sendgrid-go) helpers.
 package sendgridhelper
 
 import (

@@ -1,2 +1,2 @@
-// Package oshelper contains SyncFileWriter and various os helpers.
+// Package oshelper contains SyncFileWriter and os helpers.
 package oshelper

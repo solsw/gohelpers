@@ -1,4 +1,4 @@
-// Package slicehelper contains various slice-related helpers.
+// Package slicehelper contains slice-related helpers.
 package slicehelper
 
 import (

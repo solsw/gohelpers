@@ -1,4 +1,4 @@
-// Package jsonhelper contains various encoding/json helpers.
+// Package jsonhelper contains encoding/json helpers.
 package jsonhelper
 
 import (

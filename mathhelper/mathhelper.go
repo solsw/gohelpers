@@ -1,4 +1,4 @@
-// Package mathhelper contains various math helpers.
+// Package mathhelper contains math helpers.
 package mathhelper
 
 import (
@@ -10,8 +10,8 @@ func IsEven(i int64) bool {
 	return (i & 1) == 0
 }
 
-// AbsInt returns the absolute value of 'i'.
-func AbsInt(i int64) int64 {
+// AbsInt64 returns the absolute value of 'i'.
+func AbsInt64(i int64) int64 {
 	if i < 0 {
 		return -i
 	}

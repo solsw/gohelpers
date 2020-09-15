@@ -1,4 +1,4 @@
-// Package stringhelper contains various string-related helpers.
+// Package stringhelper contains string-related helpers.
 package stringhelper
 
 import (

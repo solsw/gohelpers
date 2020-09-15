@@ -1,2 +1,2 @@
-// Package russian contains various functions to manipulate russian words.
+// Package russian contains functions to manipulate numbers in russian words.
 package russian

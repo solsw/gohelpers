@@ -1,4 +1,4 @@
-// Package runtimehelper contains various runtime helpers.
+// Package runtimehelper contains runtime helpers.
 package runtimehelper
 
 import (

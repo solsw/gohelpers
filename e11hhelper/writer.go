@@ -24,7 +24,7 @@ func NewWriter(cfg elasticsearch.Config, idx string) (*Writer, error) {
 	return &Writer{cl: cl, idx: idx}, nil
 }
 
-// Write implements io.Writer interface.
+// Write implements the io.Writer interface.
 func (w *Writer) Write(p []byte) (int, error) {
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-index_.html
 	var err error

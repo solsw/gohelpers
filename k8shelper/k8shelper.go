@@ -1,4 +1,4 @@
-// Package k8shelper contains various Kubernetes helpers.
+// Package k8shelper contains Kubernetes helpers.
 package k8shelper
 
 import (
@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-// FromUnder reports whether running from under Kubernetes or not.
+// FromUnder reports whether running from under Kubernetes.
 func FromUnder() bool {
 	for _, e := range os.Environ() {
 		if strings.HasPrefix(e, "KUBERNETES_") {

@@ -160,7 +160,7 @@ func IntInWords(n int64, withZero bool, gender GrammaticalGender) string {
 	if n == math.MinInt64 {
 		return minInt64InWords
 	}
-	absN := mathhelper.AbsInt(n)
+	absN := mathhelper.AbsInt64(n)
 	var res string
 	var tripleNumber int
 	for absN > 0 {

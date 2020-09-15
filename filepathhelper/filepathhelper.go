@@ -1,4 +1,4 @@
-// Package filepathhelper contains various path/filepath helpers.
+// Package filepathhelper contains path/filepath helpers.
 package filepathhelper
 
 import (

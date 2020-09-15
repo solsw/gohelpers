@@ -1,4 +1,4 @@
-// Package pathhelper contains various path helpers.
+// Package pathhelper contains path helpers.
 package pathhelper
 
 import (

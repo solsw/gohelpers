@@ -1,4 +1,4 @@
-// Package ioutilhelper contains various ioutil helpers.
+// Package ioutilhelper contains ioutil helpers.
 package ioutilhelper
 
 import (

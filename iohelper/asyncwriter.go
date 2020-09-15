@@ -5,7 +5,7 @@ import (
 	"math"
 )
 
-// AsyncWriter implements io.WriteCloser, that does not block on Write call.
+// AsyncWriter is the io.WriteCloser interface implementation, that does not block on Write call.
 type AsyncWriter struct {
 	wr io.Writer
 	ch chan []byte
@@ -34,7 +34,7 @@ func NewAsyncWriterSizeFunc(w io.Writer, size int, f func([]byte) []byte) *Async
 }
 
 // NewAsyncWriterSize returns a new AsyncWriter with 'size' capacity of the underlying channel
-// and nil processing function (see NewAsyncWriterSizeFunc).
+// and no processing function (see NewAsyncWriterSizeFunc).
 func NewAsyncWriterSize(w io.Writer, size int) *AsyncWriter {
 	return NewAsyncWriterSizeFunc(w, size, nil)
 }
@@ -46,12 +46,12 @@ func NewAsyncWriterFunc(w io.Writer, f func([]byte) []byte) *AsyncWriter {
 }
 
 // NewAsyncWriter returns a new AsyncWriter with math.MaxInt16 capacity of the underlying channel
-// and nil processing function (see NewAsyncWriterSizeFunc).
+// and no processing function (see NewAsyncWriterSizeFunc).
 func NewAsyncWriter(w io.Writer) *AsyncWriter {
 	return NewAsyncWriterSizeFunc(w, math.MaxInt16, nil)
 }
 
-// Write implements io.Writer interface.
+// Write implements the io.Writer interface.
 // Write returns len(p) and nil error.
 func (aw *AsyncWriter) Write(p []byte) (int, error) {
 	// since the same slice may be passed to this method in separate calls (e.g. as log.Println does),
@@ -73,7 +73,7 @@ func (aw *AsyncWriter) Result() (int, error) {
 // Close must be called (typically by "defer" statement) to wait for the underlying io.Writer to finish writing.
 // If the underlying io.Writer is io.Closer, Close calls its Close method
 // and returns corresponding result error, otherwise Close returns nil.
-// Close implements io.Closer interface.
+// Close implements the io.Closer interface.
 func (aw *AsyncWriter) Close() error {
 	close(aw.ch)
 	<-aw.dn

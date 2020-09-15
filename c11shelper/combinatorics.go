@@ -1,4 +1,4 @@
-package combinatorics
+package c11shelper
 
 import (
 	"errors"

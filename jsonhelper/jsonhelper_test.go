@@ -35,7 +35,7 @@ func TestFormatDef(t *testing.T) {
 	}
 }
 
-func TestFormatStrToStrDefMust(t *testing.T) {
+func TestMustFormatStrToStrDef(t *testing.T) {
 	type args struct {
 		json string
 	}
@@ -48,8 +48,8 @@ func TestFormatStrToStrDefMust(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := FormatStrToStrDefMust(tt.args.json); got != tt.want {
-				t.Errorf("FormatStrToStrDefMust() = %v, want %v", got, tt.want)
+			if got := MustFormatStrToStrDef(tt.args.json); got != tt.want {
+				t.Errorf("MustFormatStrToStrDef() = %v, want %v", got, tt.want)
 			}
 		})
 	}

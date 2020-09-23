@@ -15,13 +15,13 @@ func NewString(v string) String {
 	return String{&v}
 }
 
-// Has reports whether 'n' has a value.
+// Has reports whether n has a value.
 func (n *String) Has() bool {
 	return n.val != nil
 }
 
-// Get returns the 'n's value and 'true', if 'n' has value.
-// If 'n' has no value empty string and 'false' are returned.
+// Get returns (n's value, true) if n has value.
+// Returns (empty string, false) if n has no value.
 func (n *String) Get() (string, bool) {
 	if n.val == nil {
 		return "", false
@@ -29,9 +29,8 @@ func (n *String) Get() (string, bool) {
 	return *n.val, true
 }
 
-// GetMust returns Get's result, if 'n' has a value.
-// If 'n' has no value, empty string is returned.
-func (n *String) GetMust() string {
+// MustGet is like Get but returns an empty string if n has no value.
+func (n *String) MustGet() string {
 	r, ok := n.Get()
 	if !ok {
 		return ""
@@ -39,12 +38,12 @@ func (n *String) GetMust() string {
 	return r
 }
 
-// Set sets the 'n's value to 'v'.
+// Set sets the n's value to 'v'.
 func (n *String) Set(v string) {
 	n.val = &v
 }
 
-// Null sets 'n' as having no value.
+// Null sets n as having no value.
 func (n *String) Null() {
 	n.val = nil
 }

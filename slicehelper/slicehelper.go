@@ -28,8 +28,8 @@ func ContainsEq(sl []interface{}, el interface{}, eq func(interface{}, interface
 	return false, nil
 }
 
-// ContainsEqMust calls ContainsEq, but panics in case of error.
-func ContainsEqMust(sl []interface{}, el interface{}, eq func(interface{}, interface{}) bool) bool {
+// MustContainsEq is like ContainsEq but panics in case of error.
+func MustContainsEq(sl []interface{}, el interface{}, eq func(interface{}, interface{}) bool) bool {
 	r, err := ContainsEq(sl, el, eq)
 	if err != nil {
 		panic(err)
@@ -60,8 +60,8 @@ func ContainsCmp(sl []interface{}, el interface{}, cmp func(interface{}, interfa
 	return cmp(el, sl[idx]) == 0, nil
 }
 
-// ContainsCmpMust calls ContainsCmp, but panics in case of error.
-func ContainsCmpMust(sl []interface{}, el interface{}, cmp func(interface{}, interface{}) int) bool {
+// MustContainsCmp is like ContainsCmp but panics in case of error.
+func MustContainsCmp(sl []interface{}, el interface{}, cmp func(interface{}, interface{}) int) bool {
 	r, err := ContainsCmp(sl, el, cmp)
 	if err != nil {
 		panic(err)

@@ -23,14 +23,13 @@ func FileExistsFunc(filename string, f func(string) string) (bool, error) {
 		return false, err
 	}
 	// 'filename' exists
-	if fi.Mode().IsRegular() {
-		// it is a regular file
-		return true, nil
+	if !fi.Mode().IsRegular() {
+		if f != nil {
+			filename = f(filename)
+		}
+		return false, fmt.Errorf("'%s' is not a regular file", filename)
 	}
-	if f != nil {
-		filename = f(filename)
-	}
-	return false, fmt.Errorf("'%s' is not a regular file", filename)
+	return true, nil
 }
 
 // FileExists reports whether regular file 'filename' exists.
@@ -38,9 +37,8 @@ func FileExists(filename string) (bool, error) {
 	return FileExistsFunc(filename, nil)
 }
 
-// FileExistsMust reports whether regular file 'filename' exists.
-// In case of error 'false' is returned.
-func FileExistsMust(filename string) bool {
+// MustFileExists is like FileExists but returns 'false' in case of error.
+func MustFileExists(filename string) bool {
 	fe, err := FileExists(filename)
 	if err != nil {
 		return false
@@ -64,14 +62,13 @@ func DirExistsFunc(dirname string, f func(string) string) (bool, error) {
 		return false, err
 	}
 	// 'dirname' exists
-	if fi.IsDir() {
-		// it is a directory
-		return true, nil
+	if !fi.IsDir() {
+		if f != nil {
+			dirname = f(dirname)
+		}
+		return false, fmt.Errorf("'%s' is not a directory", dirname)
 	}
-	if f != nil {
-		dirname = f(dirname)
-	}
-	return false, fmt.Errorf("'%s' is not a directory", dirname)
+	return true, nil
 }
 
 // DirExists reports whether directory 'dirname' exists.
@@ -79,9 +76,8 @@ func DirExists(dirname string) (bool, error) {
 	return DirExistsFunc(dirname, nil)
 }
 
-// DirExistsMust reports whether directory 'dirname' exists.
-// In case of error 'false' is returned.
-func DirExistsMust(dirname string) bool {
+// MustDirExists is like DirExists but returns 'false' in case of error.
+func MustDirExists(dirname string) bool {
 	de, err := DirExists(dirname)
 	if err != nil {
 		return false

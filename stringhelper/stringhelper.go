@@ -75,7 +75,7 @@ func NthRuneStrict(s string, n uint) (rune, error) {
 	return nthRunePrim(s, n, true)
 }
 
-// NthRuneAny returns the 'n'-th (starting with 0) rune from the string.
+// NthRuneAny returns the n-th (starting with 0) rune from the string.
 // The string must be not empty, but may be not valid.
 // If the string is invalid and the required rune is situated before an invalid UTF-8 sequence,
 // the rune is returned without error.
@@ -93,7 +93,7 @@ func nthWordFromWords(ww []string, n uint) (string, error) {
 	return ww[n], nil
 }
 
-// NthWord returns the 'n'-th (starting with 0) word from the string.
+// NthWord returns the n-th (starting with 0) word from the string.
 func NthWord(s string, n uint) (string, error) {
 	if s == "" {
 		return "", ErrEmptyString
@@ -134,7 +134,7 @@ func wordByDelims(s string, n uint, delims []rune, last bool) (string, error) {
 	return nthWordFromWords(ww, n)
 }
 
-// NthWordDelims returns the 'n'-th (starting with 0) word from the string.
+// NthWordDelims returns the n-th (starting with 0) word from the string.
 // 'delims' - slice of word dilimeters.
 // If 'delims' is empty, NthWord's result is returned.
 func NthWordDelims(s string, n uint, delims []rune) (string, error) {

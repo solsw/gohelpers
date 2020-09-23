@@ -19,9 +19,9 @@ func CallerName() (string, bool) {
 	return nthCallerName(2)
 }
 
-// CallerNameMust returns name of the function that called CallerNameMust.
-// In case of failure empty string is returned.
-func CallerNameMust() string {
+// MustCallerName returns name of the function that called MustCallerName.
+// In case of a failure empty string is returned.
+func MustCallerName() string {
 	// do not call CallerName() because it adds another stack frame to the calling stack
 	fn, ok := nthCallerName(2)
 	if !ok {
@@ -35,9 +35,9 @@ func CallerCallerName() (string, bool) {
 	return nthCallerName(3)
 }
 
-// CallerCallerNameMust returns name of the function that called CallerCallerNameMust.
-// In case of any failure empty string is returned.
-func CallerCallerNameMust() string {
+// MustCallerCallerName returns name of the function that called MustCallerCallerName.
+// In case of a failure empty string is returned.
+func MustCallerCallerName() string {
 	fn, ok := nthCallerName(3)
 	if !ok {
 		return ""

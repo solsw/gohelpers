@@ -7,8 +7,8 @@ import (
 	"strings"
 )
 
-// MustMarshal is like json.Marshal but panics in case of error.
-func MustMarshal(v interface{}) []byte {
+// MarshalMust is like json.Marshal but panics in case of error.
+func MarshalMust(v interface{}) []byte {
 	bb, err := json.Marshal(v)
 	if err != nil {
 		panic(err)
@@ -16,9 +16,9 @@ func MustMarshal(v interface{}) []byte {
 	return bb
 }
 
-// MustMarshalIndent is like json.MarshalIndent but panics in case of error.
+// MarshalIndentMust is like json.MarshalIndent but panics in case of error.
 // (See json.MarshalIndent for 'prefix' and 'indent' usage.)
-func MustMarshalIndent(v interface{}, prefix, indent string) []byte {
+func MarshalIndentMust(v interface{}, prefix, indent string) []byte {
 	bb, err := json.MarshalIndent(v, prefix, indent)
 	if err != nil {
 		panic(err)
@@ -31,9 +31,9 @@ func MarshalIndentDef(v interface{}) ([]byte, error) {
 	return json.MarshalIndent(v, "", "  ")
 }
 
-// MustMarshalIndentDef is like MarshalIndentDef but panics in case of error.
-func MustMarshalIndentDef(v interface{}) []byte {
-	return MustMarshalIndent(v, "", "  ")
+// MarshalIndentDefMust is like MarshalIndentDef but panics in case of error.
+func MarshalIndentDefMust(v interface{}) []byte {
+	return MarshalIndentMust(v, "", "  ")
 }
 
 // Format reads JSON-encoded data from 'r', then writes formatted data to 'w'.
@@ -64,8 +64,8 @@ func FormatStrToStr(json, prefix, indent string) (string, error) {
 	return b.String(), nil
 }
 
-// MustFormatStrToStr is like FormatStrToStr but panics in case of error.
-func MustFormatStrToStr(json, prefix, indent string) string {
+// FormatStrToStrMust is like FormatStrToStr but panics in case of error.
+func FormatStrToStrMust(json, prefix, indent string) string {
 	s, err := FormatStrToStr(json, prefix, indent)
 	if err != nil {
 		panic(err)
@@ -78,7 +78,7 @@ func FormatStrToStrDef(json string) (string, error) {
 	return FormatStrToStr(json, "", "  ")
 }
 
-// MustFormatStrToStrDef is like FormatStrToStrDef but panics in case of error.
-func MustFormatStrToStrDef(json string) string {
-	return MustFormatStrToStr(json, "", "  ")
+// FormatStrToStrDefMust is like FormatStrToStrDef but panics in case of error.
+func FormatStrToStrDefMust(json string) string {
+	return FormatStrToStrMust(json, "", "  ")
 }

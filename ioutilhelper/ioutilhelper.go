@@ -22,8 +22,8 @@ func TempFileName(dir, pattern string) (string, error) {
 	return f.Name(), nil
 }
 
-// MustTempFileName is like TempFileName but returns an empty string in case of error.
-func MustTempFileName() string {
+// TempFileNameMust is like TempFileName but returns an empty string in case of error.
+func TempFileNameMust() string {
 	tfn, err := TempFileName("", "")
 	if err != nil {
 		return ""

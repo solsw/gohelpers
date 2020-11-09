@@ -37,8 +37,8 @@ func FileExists(filename string) (bool, error) {
 	return FileExistsFunc(filename, nil)
 }
 
-// MustFileExists is like FileExists but returns 'false' in case of error.
-func MustFileExists(filename string) bool {
+// FileExistsMust is like FileExists but returns 'false' in case of error.
+func FileExistsMust(filename string) bool {
 	fe, err := FileExists(filename)
 	if err != nil {
 		return false
@@ -76,8 +76,8 @@ func DirExists(dirname string) (bool, error) {
 	return DirExistsFunc(dirname, nil)
 }
 
-// MustDirExists is like DirExists but returns 'false' in case of error.
-func MustDirExists(dirname string) bool {
+// DirExistsMust is like DirExists but returns 'false' in case of error.
+func DirExistsMust(dirname string) bool {
 	de, err := DirExists(dirname)
 	if err != nil {
 		return false

@@ -6,9 +6,11 @@ import (
 	"testing"
 )
 
-func TestMergeInts(t *testing.T) {
-	in1 := make(chan int)
-	in2 := make(chan int)
+func TestMerge2Ints(t *testing.T) {
+	var (
+		in1 chan int = make(chan int)
+		in2 chan int = make(chan int)
+	)
 
 	go func() {
 		for i := 0; i < 4; i++ {
@@ -24,13 +26,13 @@ func TestMergeInts(t *testing.T) {
 		close(in2)
 	}()
 
-	var ii []int
-	for v := range MergeInts(in1, in2) {
-		ii = append(ii, v)
+	var out []int
+	for v := range Merge2Ints(in1, in2) {
+		out = append(out, v)
 	}
-	sort.Ints(ii)
+	sort.Ints(out)
 	want := []int{1, 1, 1, 1, 2, 2, 2, 2}
-	if !reflect.DeepEqual(ii, want) {
-		t.Errorf("MergeInts() = %v, want %v", ii, want)
+	if !reflect.DeepEqual(out, want) {
+		t.Errorf("MergeInts() = %v, want %v", out, want)
 	}
 }

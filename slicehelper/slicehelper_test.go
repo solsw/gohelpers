@@ -81,7 +81,7 @@ var cmpInt = func(v1, v2 interface{}) int {
 	return 0
 }
 
-func TestMustContainsCmp(t *testing.T) {
+func TestContainsCmpMust(t *testing.T) {
 	type args struct {
 		sl  []interface{}
 		el  interface{}
@@ -105,8 +105,8 @@ func TestMustContainsCmp(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := MustContainsCmp(tt.args.sl, tt.args.el, tt.args.cmp); got != tt.want {
-				t.Errorf("MustContainsCmp() = %v, want %v", got, tt.want)
+			if got := ContainsCmpMust(tt.args.sl, tt.args.el, tt.args.cmp); got != tt.want {
+				t.Errorf("ContainsCmpMust() = %v, want %v", got, tt.want)
 			}
 		})
 	}

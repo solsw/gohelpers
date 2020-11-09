@@ -1,13 +1,15 @@
 package chanhelper
 
-// MergeInts merges two int channels into one.
-func MergeInts(in1, in2 <-chan int) chan int {
+// Merge2Ints merges two int channels into one.
+func Merge2Ints(in1, in2 <-chan int) <-chan int {
 	out := make(chan int)
 
 	go func(in1, in2 <-chan int, out chan<- int) {
-		var v int
-		ok1 := true
-		ok2 := true
+		var (
+			v   int
+			ok1 bool = true
+			ok2 bool = true
+		)
 		for ok1 || ok2 {
 			select {
 			case v, ok1 = <-in1:

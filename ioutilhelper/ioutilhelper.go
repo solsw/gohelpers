@@ -46,17 +46,16 @@ func ReadFileStrings(filename string) ([]string, error) {
 	return r, s.Err()
 }
 
-// WriteFileStrings writes 'ss' to a file 'filename'.
+// WriteFileStringsNewLine writes 'ss' to a file named by 'filename'.
+// Each string (including the last one) is followed by 'newLine'.
+// (See ioutil.WriteFile for 'filename' and 'perm' usage.)
+func WriteFileStringsNewLine(filename string, ss []string, newLine string, perm os.FileMode) error {
+	return ioutil.WriteFile(filename, []byte(strings.Join(ss, newLine)+newLine), perm)
+}
+
+// WriteFileStrings writes 'ss' to a file named by 'filename'.
 // Each string (including the last one) is followed by oshelper.NewLine.
 // (See ioutil.WriteFile for 'filename' and 'perm' usage.)
 func WriteFileStrings(filename string, ss []string, perm os.FileMode) error {
-	var b strings.Builder
-	for i := range ss {
-		b.WriteString(ss[i] + oshelper.NewLine)
-	}
-	err := ioutil.WriteFile(filename, []byte(b.String()), perm)
-	if err != nil {
-		return err
-	}
-	return nil
+	return WriteFileStringsNewLine(filename, ss, oshelper.NewLine, perm)
 }

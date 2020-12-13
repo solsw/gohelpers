@@ -9,10 +9,10 @@ func IntToInterface(in <-chan int) <-chan interface{} {
 	out := make(chan interface{})
 
 	go func(i <-chan int, o chan<- interface{}) {
+		defer close(o)
 		for v := range i {
 			o <- v
 		}
-		close(o)
 	}(in, out)
 
 	return out

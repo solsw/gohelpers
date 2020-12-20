@@ -4,7 +4,6 @@ import (
 	"math/rand"
 	"reflect"
 	"testing"
-	"unicode/utf8"
 
 	"github.com/solsw/gohelpers/oshelper"
 )
@@ -89,71 +88,6 @@ func TestIsNumeric(t *testing.T) {
 	}
 }
 
-func TestNthRuneStrict(t *testing.T) {
-	type args struct {
-		s string
-		n uint
-	}
-	tests := []struct {
-		name    string
-		args    args
-		want    rune
-		wantErr bool
-	}{
-		{name: "1e", args: args{s: "", n: 2}, want: utf8.RuneError, wantErr: true},
-		{name: "invalidString", args: args{s: invalidString}, want: utf8.RuneError, wantErr: true},
-		{name: "2e", args: args{s: " ", n: 2}, want: utf8.RuneError, wantErr: true},
-		{name: "1", args: args{s: "3.1415926535", n: 2}, want: '1', wantErr: false},
-		{name: "2", args: args{s: "йцукен", n: 2}, want: 'у', wantErr: false},
-		{name: "3", args: args{s: invalidString, n: 2}, want: utf8.RuneError, wantErr: true},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			got, err := NthRuneStrict(tt.args.s, tt.args.n)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("NthRuneStrict() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
-			if got != tt.want {
-				t.Errorf("NthRuneStrict() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
-func TestNthRuneAny(t *testing.T) {
-	type args struct {
-		s string
-		n uint
-	}
-	tests := []struct {
-		name    string
-		args    args
-		want    rune
-		wantErr bool
-	}{
-		{name: "1e", args: args{s: "", n: 2}, want: utf8.RuneError, wantErr: true},
-		{name: "2e", args: args{s: " ", n: 2}, want: utf8.RuneError, wantErr: true},
-		{name: "invalidString1", args: args{s: invalidString}, want: 'ф', wantErr: false},
-		{name: "invalidString2", args: args{s: invalidString, n: 2}, want: 'в', wantErr: false},
-		{name: "invalidString3", args: args{s: invalidString, n: 8}, want: utf8.RuneError, wantErr: true},
-		{name: "1", args: args{s: "3.1415926535", n: 2}, want: '1', wantErr: false},
-		{name: "2", args: args{s: "йцукен", n: 2}, want: 'у', wantErr: false},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			got, err := NthRuneAny(tt.args.s, tt.args.n)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("NthRuneAny() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
-			if got != tt.want {
-				t.Errorf("NthRuneAny() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
 func TestNthWord(t *testing.T) {
 	type args struct {
 		s string
@@ -208,6 +142,63 @@ func TestLastWord(t *testing.T) {
 			}
 			if got != tt.want {
 				t.Errorf("LastWord() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestNthWordFunc(t *testing.T) {
+	type args struct {
+		s string
+		n uint
+		f func(rune) bool
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    string
+		wantErr bool
+	}{
+		{name: "0", args: args{s: "q0w00e000", n: 1}, wantErr: true},
+		{name: "1", args: args{s: "q0w00e000", n: 1, f: func(r rune) bool { return r == '0' }}, want: "w"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := NthWordFunc(tt.args.s, tt.args.n, tt.args.f)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("NthWordFunc() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if got != tt.want {
+				t.Errorf("NthWordFunc() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestLastWordFunc(t *testing.T) {
+	type args struct {
+		s string
+		f func(rune) bool
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    string
+		wantErr bool
+	}{
+		{name: "0", args: args{s: "q0w00e000"}, wantErr: true},
+		{name: "1", args: args{s: "q0w00e000", f: func(r rune) bool { return r == '0' }}, want: "e"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := LastWordFunc(tt.args.s, tt.args.f)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("LastWordFunc() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if got != tt.want {
+				t.Errorf("LastWordFunc() = %v, want %v", got, tt.want)
 			}
 		})
 	}
@@ -280,8 +271,8 @@ func TestLastWordDelims(t *testing.T) {
 func TestSubstr(t *testing.T) {
 	type args struct {
 		s      string
-		start  int
-		length int
+		start  uint
+		length uint
 	}
 	tests := []struct {
 		name    string
@@ -289,8 +280,6 @@ func TestSubstr(t *testing.T) {
 		want    string
 		wantErr bool
 	}{
-		{name: "1e", args: args{start: -1}, wantErr: true},
-		{name: "2e", args: args{length: -2}, wantErr: true},
 		{name: "3e", args: args{s: "1", start: 0, length: 2}, wantErr: true},
 		{name: "4e", args: args{s: "1", start: 1, length: 1}, wantErr: true},
 		{name: "5e", args: args{s: "1", start: 2, length: 0}, wantErr: true},
@@ -319,7 +308,7 @@ func TestSubstr(t *testing.T) {
 func TestSubstrBeg(t *testing.T) {
 	type args struct {
 		s      string
-		length int
+		length uint
 	}
 	tests := []struct {
 		name    string
@@ -327,7 +316,6 @@ func TestSubstrBeg(t *testing.T) {
 		want    string
 		wantErr bool
 	}{
-		{name: "1e", args: args{length: -1}, wantErr: true},
 		{name: "2e", args: args{s: "1", length: 2}, wantErr: true},
 		{name: "0", args: args{s: "", length: 0}, want: ""},
 		{name: "1", args: args{s: "1", length: 0}, want: ""},
@@ -355,7 +343,7 @@ func TestSubstrBeg(t *testing.T) {
 func TestSubstrEnd(t *testing.T) {
 	type args struct {
 		s      string
-		length int
+		length uint
 	}
 	tests := []struct {
 		name    string
@@ -363,7 +351,6 @@ func TestSubstrEnd(t *testing.T) {
 		want    string
 		wantErr bool
 	}{
-		{name: "1e", args: args{length: -1}, wantErr: true},
 		{name: "2e", args: args{s: "1", length: 2}, wantErr: true},
 		{name: "0", args: args{s: "", length: 0}, want: ""},
 		{name: "1", args: args{s: "1", length: 0}, want: ""},
@@ -391,7 +378,7 @@ func TestSubstrEnd(t *testing.T) {
 func TestSubstrToEnd(t *testing.T) {
 	type args struct {
 		s     string
-		start int
+		start uint
 	}
 	tests := []struct {
 		name    string
@@ -399,7 +386,6 @@ func TestSubstrToEnd(t *testing.T) {
 		want    string
 		wantErr bool
 	}{
-		{name: "1e", args: args{start: -1}, wantErr: true},
 		{name: "2e", args: args{s: "1", start: 2}, wantErr: true},
 		{name: "1", args: args{s: "1", start: 1}, want: ""},
 		{name: "2", args: args{s: "1", start: 0}, want: "1"},
@@ -416,62 +402,6 @@ func TestSubstrToEnd(t *testing.T) {
 			}
 			if got != tt.want {
 				t.Errorf("SubstrToEnd() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
-func TestLastByte(t *testing.T) {
-	type args struct {
-		s string
-	}
-	tests := []struct {
-		name    string
-		args    args
-		want    byte
-		wantErr bool
-	}{
-		{name: "1e", args: args{s: ""}, wantErr: true},
-		{name: "1", args: args{s: "qwerty"}, want: 'y'},
-		{name: "2", args: args{s: "йцукен"}, want: 189},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			got, err := LastByte(tt.args.s)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("LastByte() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
-			if got != tt.want {
-				t.Errorf("LastByte() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
-func TestLastRune(t *testing.T) {
-	type args struct {
-		s string
-	}
-	tests := []struct {
-		name    string
-		args    args
-		want    rune
-		wantErr bool
-	}{
-		{name: "1e", args: args{s: ""}, want: utf8.RuneError, wantErr: true},
-		{name: "1", args: args{s: "qwerty"}, want: rune('y')},
-		{name: "2", args: args{s: "йцукен"}, want: rune('н')},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			got, err := LastRune(tt.args.s)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("LastRune() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
-			if got != tt.want {
-				t.Errorf("LastRune() = %v, want %v", got, tt.want)
 			}
 		})
 	}

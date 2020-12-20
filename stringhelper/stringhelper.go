@@ -12,18 +12,12 @@ import (
 	"github.com/solsw/gohelpers/oshelper"
 )
 
-// stringhelper-related errors
-var (
-	ErrEmptyString   = errors.New("empty string")
-	ErrInvalidString = errors.New("invalid string")
-)
-
-// IsEmptyOrWhite reports whether the string is empty or contains only white spaces.
+// IsEmptyOrWhite reports whether 's' is empty or contains only white spaces.
 func IsEmptyOrWhite(s string) bool {
 	return strings.TrimSpace(s) == ""
 }
 
-// IsDigital reports whether the string consists only of digits.
+// IsDigital reports whether 's' consists only of digits.
 func IsDigital(s string) bool {
 	if s == "" || !utf8.ValidString(s) {
 		return false
@@ -36,7 +30,7 @@ func IsDigital(s string) bool {
 	return true
 }
 
-// IsNumeric reports whether the string represents a number.
+// IsNumeric reports whether 's' represents a number.
 func IsNumeric(s string) bool {
 	if s == "" || !utf8.ValidString(s) {
 		return false
@@ -49,108 +43,86 @@ func IsNumeric(s string) bool {
 	return err == nil
 }
 
-func nthRunePrim(s string, n uint, strict bool) (rune, error) {
-	if s == "" {
-		return utf8.RuneError, ErrEmptyString
-	}
-	if strict && !utf8.ValidString(s) {
-		return utf8.RuneError, ErrInvalidString
-	}
-	var count uint
-	for _, r := range s {
-		if !strict && r == utf8.RuneError {
-			return utf8.RuneError, ErrInvalidString
-		}
-		if count == n {
-			return r, nil
-		}
-		count++
-	}
-	return utf8.RuneError, errors.New("n is too large")
-}
-
-// NthRuneStrict returns n-th (starting with 0) rune from s.
-// The string must be not empty and valid.
-func NthRuneStrict(s string, n uint) (rune, error) {
-	return nthRunePrim(s, n, true)
-}
-
-// NthRuneAny returns the n-th (starting with 0) rune from the string.
-// The string must be not empty, but may be not valid.
-// If the string is invalid and the required rune is situated before an invalid UTF-8 sequence,
-// the rune is returned without error.
-func NthRuneAny(s string, n uint) (rune, error) {
-	return nthRunePrim(s, n, false)
-}
-
-func nthWordFromWords(ww []string, n uint) (string, error) {
+func wordFromWords(ww []string, n uint, last bool) (string, error) {
 	if len(ww) == 0 {
 		return "", errors.New("no words in string")
 	}
-	if uint(len(ww)) <= n {
+	if last {
+		return ww[len(ww)-1], nil
+	}
+	if n >= uint(len(ww)) {
 		return "", errors.New("n is too large")
 	}
 	return ww[n], nil
 }
 
-// NthWord returns the n-th (starting with 0) word from the string.
+// NthWord returns the 'n'-th (starting with 0) word from 's'.
+// 's' is separated into words with white space characters (see strings.Fields).
 func NthWord(s string, n uint) (string, error) {
-	if s == "" {
-		return "", ErrEmptyString
-	}
-	return nthWordFromWords(strings.Fields(s), n)
+	return wordFromWords(strings.Fields(s), n, false)
 }
 
-// LastWord returns the last word from the string.
+// LastWord returns the last word from 's'.
+// 's' is separated into words with white space characters (see strings.Fields).
 func LastWord(s string) (string, error) {
-	if s == "" {
-		return "", ErrEmptyString
-	}
-	ww := strings.Fields(s)
-	return nthWordFromWords(ww, uint(len(ww)-1))
+	return wordFromWords(strings.Fields(s), 0, true)
 }
 
-func wordByDelims(s string, n uint, delims []rune, last bool) (string, error) {
-	if s == "" {
-		return "", ErrEmptyString
+// NthWordFunc returns the 'n'-th (starting with 0) word from 's'.
+// 's' is separated into words with 'f' (see strings.FieldsFunc).
+func NthWordFunc(s string, n uint, f func(rune) bool) (string, error) {
+	if f == nil {
+		return "", errors.New("f is nil")
 	}
+	return wordFromWords(strings.FieldsFunc(s, f), n, false)
+}
+
+// LastWordFunc returns the last word from 's'.
+// 's' is separated into words with 'f' (see strings.FieldsFunc).
+func LastWordFunc(s string, f func(rune) bool) (string, error) {
+	if f == nil {
+		return "", errors.New("f is nil")
+	}
+	return wordFromWords(strings.FieldsFunc(s, f), 0, true)
+}
+
+// NthWordDelims returns the n-th (starting with 0) word from 's'.
+// 'delims' - slice of word dilimeters.
+// If 'delims' is empty, NthWord's result is returned.
+func NthWordDelims(s string, n uint, delims []rune) (string, error) {
 	if len(delims) == 0 {
-		if last {
-			return LastWord(s)
-		}
 		return NthWord(s, n)
 	}
-	ww := strings.FieldsFunc(s, func(r rune) bool {
-		for i := range delims {
-			if delims[i] == r {
+	return NthWordFunc(s, n, func(r rune) bool {
+		for _, delim := range delims {
+			if delim == r {
 				return true
 			}
 		}
 		return false
 	})
-	if last {
-		return nthWordFromWords(ww, uint(len(ww)-1))
-	}
-	return nthWordFromWords(ww, n)
 }
 
-// NthWordDelims returns the n-th (starting with 0) word from the string.
-// 'delims' - slice of word dilimeters.
-// If 'delims' is empty, NthWord's result is returned.
-func NthWordDelims(s string, n uint, delims []rune) (string, error) {
-	return wordByDelims(s, n, delims, false)
-}
-
-// LastWordDelims returns the last word from the string.
+// LastWordDelims returns the last word from 's'.
 // 'delims' - slice of word dilimeters.
 // If 'delims' is empty, LastWord's result is returned.
 func LastWordDelims(s string, delims []rune) (string, error) {
-	return wordByDelims(s, 0, delims, true)
+	if len(delims) == 0 {
+		return LastWord(s)
+	}
+	return LastWordFunc(s, func(r rune) bool {
+		for _, delim := range delims {
+			if delim == r {
+				return true
+			}
+		}
+		return false
+	})
 }
 
-// SubstrPrim retrieves a substring from the string without error checking.
+// SubstrPrim retrieves a substring from 's' without error checking.
 // The substring starts at a 'start' rune position and has a specified 'length'.
-func SubstrPrim(s string, start, length int) string {
+func SubstrPrim(s string, start, length uint) string {
 	if length == 0 {
 		return ""
 	}
@@ -159,60 +131,37 @@ func SubstrPrim(s string, start, length int) string {
 	return string(rr)
 }
 
-// Substr retrieves a substring from the string.
+// Substr retrieves a substring from 's'.
 // The substring starts at a 'start' rune position and has a specified 'length'.
-func Substr(s string, start, length int) (string, error) {
-	if start < 0 {
-		return "", errors.New("start is less than zero")
-	}
-	if length < 0 {
-		return "", errors.New("length is less than zero")
-	}
-	if start+length > len(s) {
+func Substr(s string, start, length uint) (string, error) {
+	if start+length > uint(len(s)) {
 		return "", errors.New("start plus length is greater than string length")
 	}
 	return SubstrPrim(s, start, length), nil
 }
 
-// SubstrBeg retrieves a substring with length 'length' from the beginning of the string.
-func SubstrBeg(s string, length int) (string, error) {
-	if length > len(s) {
+// SubstrBeg retrieves a substring with a specified 'length' from the beginning of 's'.
+func SubstrBeg(s string, length uint) (string, error) {
+	if length > uint(len(s)) {
 		return "", errors.New("length is greater than string length")
 	}
 	return Substr(s, 0, length)
 }
 
-// SubstrEnd retrieves a substring with length 'length' from the end of the string.
-func SubstrEnd(s string, length int) (string, error) {
-	if length > len(s) {
+// SubstrEnd retrieves a substring with a specified 'length' from the end of 's'.
+func SubstrEnd(s string, length uint) (string, error) {
+	if length > uint(len(s)) {
 		return "", errors.New("length is greater than string length")
 	}
-	return Substr(s, len(s)-length, length)
+	return Substr(s, uint(len(s))-length, length)
 }
 
-// SubstrToEnd retrieves a substring from 'start' rune position and to the end of the string.
-func SubstrToEnd(s string, start int) (string, error) {
-	if start > len(s) {
+// SubstrToEnd retrieves a substring from 'start' rune position and to the end of 's'.
+func SubstrToEnd(s string, start uint) (string, error) {
+	if start > uint(len(s)) {
 		return "", errors.New("start is greater than string length")
 	}
-	return Substr(s, start, len(s)-start)
-}
-
-// LastByte returns the last byte from the string.
-func LastByte(s string) (byte, error) {
-	if s == "" {
-		return 0, ErrEmptyString
-	}
-	return s[len(s)-1], nil
-}
-
-// LastRune returns the last rune from the string.
-func LastRune(s string) (rune, error) {
-	if s == "" {
-		return utf8.RuneError, ErrEmptyString
-	}
-	rr := []rune(s)
-	return rr[len(rr)-1], nil
+	return Substr(s, start, uint(len(s))-start)
 }
 
 // Unique returns unique strings from 'ss', preserving order of strings in 'ss'.
@@ -232,7 +181,7 @@ func Unique(ss []string) []string {
 	return res
 }
 
-// UniqueSorted returns sorted unique strings from ss.
+// UniqueSorted returns sorted unique strings from 'ss'.
 // (May be up to two times faster than Unique. Subject for benchmarking.)
 func UniqueSorted(ss []string) []string {
 	if len(ss) < 2 {
@@ -248,7 +197,7 @@ func UniqueSorted(ss []string) []string {
 	return res
 }
 
-// RemoveEscSGR removes SGR escape sequence from string
+// RemoveEscSGR removes SGR escape sequence from 's'
 // (see https://en.wikipedia.org/wiki/ANSI_escape_code).
 func RemoveEscSGR(s string) string {
 	esc := false

@@ -9,7 +9,6 @@ import (
 type UnixTextTime time.Time
 
 // MarshalText implements the encoding.TextMarshaler interface.
-// Location associated with 't' is ignored.
 func (t UnixTextTime) MarshalText() ([]byte, error) {
 	return []byte(strconv.FormatInt(time.Time(t).Unix(), 10)), nil
 }

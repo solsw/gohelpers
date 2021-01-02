@@ -20,7 +20,7 @@ func IntToInterface(in <-chan int) <-chan interface{} {
 
 // PeekInt checks int channel for a value.
 // Returns: 'v' - the value (if 'ok' is true and 'open' is true),
-// 'ok' - whether the value was obtained from the channel or there is no value available,
+// 'ok' - 'true' if the value was obtained from the channel or 'false' if there is no value available,
 // 'open' - whether the channel is opened or closed.
 func PeekInt(ch <-chan int) (v int, ok, open bool) {
 	select {

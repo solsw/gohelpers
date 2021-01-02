@@ -5,6 +5,7 @@ import (
 )
 
 // TimeString is a helper type to store time.Time as string.
+//
 // TimeString may be used instead of time.Time for encoding/decoding time.Time as JSON,
 // since time.Time does not respect encoding/json 'omitempty' option.
 type TimeString string

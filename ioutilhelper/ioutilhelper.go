@@ -5,33 +5,27 @@ import (
 	"bufio"
 	"io/ioutil"
 	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/solsw/gohelpers/oshelper"
 )
 
-// TempFileName returns filename of a temporary file.
-// (See ioutil.TempFile for 'dir' and 'pattern' usage.)
-func TempFileName(dir, pattern string) (string, error) {
-	f, err := ioutil.TempFile(dir, pattern)
+// TempFileJustName returns just name of a temporary file.
+// (See ioutil.TempFile for 'pattern' usage.)
+func TempFileJustName(pattern string) (string, error) {
+	f, err := ioutil.TempFile("", pattern)
 	if err != nil {
 		return "", err
 	}
-	f.Close()
-	os.Remove(f.Name())
-	return f.Name(), nil
+	defer func() {
+		f.Close()
+		os.Remove(f.Name())
+	}()
+	return filepath.Base(f.Name()), nil
 }
 
-// TempFileNameMust is like TempFileName but returns an empty string in case of error.
-func TempFileNameMust() string {
-	tfn, err := TempFileName("", "")
-	if err != nil {
-		return ""
-	}
-	return tfn
-}
-
-// ReadFileStrings reads the file 'filename' and returns its contents as []string.
+// ReadFileStrings reads the file 'filename' and returns the contents as []string.
 func ReadFileStrings(filename string) ([]string, error) {
 	f, err := os.Open(filename)
 	if err != nil {

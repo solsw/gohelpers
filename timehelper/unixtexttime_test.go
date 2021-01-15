@@ -11,7 +11,7 @@ func TestUnixTextTime_MarshalText(t *testing.T) {
 		t    UnixTextTime
 		want string
 	}{
-		{name: "1", t: UnixTextTime(YMDMust(2006, 1, 2)), want: "1136160000"},
+		{name: "1", t: UnixTextTime(DateYMD(2006, 1, 2)), want: "1136160000"},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -35,7 +35,7 @@ func Test_unixTextTimeUnmarshalStr(t *testing.T) {
 		wantErr bool
 	}{
 		{name: "0", args: args{str: "qwerty"}, wantErr: true},
-		{name: "1", args: args{str: "1136160000"}, want: UnixTextTime(YMDMust(2006, 1, 2))},
+		{name: "1", args: args{str: "1136160000"}, want: UnixTextTime(DateYMD(2006, 1, 2))},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

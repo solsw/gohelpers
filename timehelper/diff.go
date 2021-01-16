@@ -4,12 +4,6 @@ import (
 	"time"
 )
 
-// Missing in time package Durations.
-const (
-	Day  time.Duration = 24 * time.Hour
-	Week time.Duration = 7 * Day
-)
-
 // diff returns difference (t2 - t1) truncated to whole number of 'dur's.
 func diff(t1, t2 time.Time, dur time.Duration) int {
 	// inspired by https://github.com/ribice/dt/blob/c4e011852071395c6d984ef7b3b579f5951c88de/date.go#L81
@@ -17,17 +11,20 @@ func diff(t1, t2 time.Time, dur time.Duration) int {
 	return int(deltaUnix / int64(dur/time.Second))
 }
 
-// DaysDiff returns difference (t2 - t1) as a number of whole days.
+// DaysDiff returns number of whole days containing in difference (t2 - t1).
+// If 't2' is before 't1', result is negative.
 func DaysDiff(t1, t2 time.Time) int {
 	return diff(t1, t2, Day)
 }
 
-// WeeksDiff returns difference (t2 - t1) as a number of whole weeks.
+// WeeksDiff returns number of whole weeks containing in difference (t2 - t1).
+// If 't2' is before 't1', result is negative.
 func WeeksDiff(t1, t2 time.Time) int {
 	return diff(t1, t2, Week)
 }
 
-// MonthsDiff returns difference (t2 - t1) as a number of whole months.
+// MonthsDiff returns number of whole months containing in difference (t2 - t1).
+// If 't2' is before 't1', result is negative.
 func MonthsDiff(t1, t2 time.Time) int {
 	var (
 		after, before time.Time
@@ -55,7 +52,8 @@ func MonthsDiff(t1, t2 time.Time) int {
 	return r
 }
 
-// YearsDiff returns difference (t2 - t1) as a number of whole years.
+// YearsDiff returns number of whole years containing in difference (t2 - t1).
+// If 't2' is before 't1', result is negative.
 func YearsDiff(t1, t2 time.Time) int {
 	var (
 		after, before time.Time

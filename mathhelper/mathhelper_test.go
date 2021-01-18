@@ -37,6 +37,9 @@ func TestRoundInt64(t *testing.T) {
 		{name: "1", args: args{x: 2.1}, want: 2},
 		{name: "2", args: args{x: 2.5}, want: 3},
 		{name: "3", args: args{x: 2.7}, want: 3},
+		{name: "4", args: args{x: -2.1}, want: -2},
+		{name: "5", args: args{x: -2.5}, want: -3},
+		{name: "6", args: args{x: -2.7}, want: -3},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -59,11 +62,39 @@ func TestRoundToEvenInt64(t *testing.T) {
 		{name: "1", args: args{x: 2.1}, want: 2},
 		{name: "2", args: args{x: 2.5}, want: 2},
 		{name: "3", args: args{x: 2.7}, want: 3},
+		{name: "4", args: args{x: -2.1}, want: -2},
+		{name: "5", args: args{x: -2.5}, want: -2},
+		{name: "6", args: args{x: -2.7}, want: -3},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := RoundToEvenInt64(tt.args.x); got != tt.want {
 				t.Errorf("RoundToEvenInt64() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestTruncInt64(t *testing.T) {
+	type args struct {
+		x float64
+	}
+	tests := []struct {
+		name string
+		args args
+		want int64
+	}{
+		{name: "1", args: args{x: 2.1}, want: 2},
+		{name: "2", args: args{x: 2.5}, want: 2},
+		{name: "3", args: args{x: 2.7}, want: 2},
+		{name: "4", args: args{x: -2.1}, want: -2},
+		{name: "5", args: args{x: -2.5}, want: -2},
+		{name: "6", args: args{x: -2.7}, want: -2},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := TruncInt64(tt.args.x); got != tt.want {
+				t.Errorf("TruncInt64() = %v, want %v", got, tt.want)
 			}
 		})
 	}

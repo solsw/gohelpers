@@ -28,6 +28,11 @@ func RoundToEvenInt64(x float64) int64 {
 	return int64(math.RoundToEven(x))
 }
 
+// TruncInt64 returns the integer value of 'x'.
+func TruncInt64(x float64) int64 {
+	return int64(math.Trunc(x))
+}
+
 // ApproximatelyEquals reports whether two float64 values are equal within the provided 'tolerance'.
 func ApproximatelyEquals(v1, v2, tolerance float64) bool {
 	return math.Abs(v1-v2) <= math.Abs(tolerance)

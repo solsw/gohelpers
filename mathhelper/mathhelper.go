@@ -18,6 +18,16 @@ func AbsInt64(i int64) int64 {
 	return i
 }
 
+// RoundInt64 returns the nearest to 'x' integer, rounding half away from zero.
+func RoundInt64(x float64) int64 {
+	return int64(math.Round(x))
+}
+
+// RoundToEvenInt64 returns the nearest to 'x' integer, rounding half to even.
+func RoundToEvenInt64(x float64) int64 {
+	return int64(math.RoundToEven(x))
+}
+
 // ApproximatelyEquals reports whether two float64 values are equal within the provided 'tolerance'.
 func ApproximatelyEquals(v1, v2, tolerance float64) bool {
 	return math.Abs(v1-v2) <= math.Abs(tolerance)

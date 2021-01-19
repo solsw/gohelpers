@@ -1,6 +1,7 @@
 package mathhelper
 
 import (
+	"math"
 	"testing"
 )
 
@@ -100,10 +101,32 @@ func TestTruncInt64(t *testing.T) {
 	}
 }
 
-func TestApproximatelyEquals(t *testing.T) {
+func TestFrac(t *testing.T) {
 	type args struct {
-		value1    float64
-		value2    float64
+		x float64
+	}
+	tests := []struct {
+		name string
+		args args
+		want float64
+	}{
+		{name: "1", args: args{x: 2.1}, want: 0.1},
+		{name: "2", args: args{x: math.Pi}, want: 0.1415926},
+		{name: "3", args: args{x: -math.E}, want: -0.718281828},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := Frac(tt.args.x); !NearlyEqual(got, tt.want, 0.0001) {
+				t.Errorf("Frac() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestNearlyEqual(t *testing.T) {
+	type args struct {
+		v1        float64
+		v2        float64
 		tolerance float64
 	}
 	tests := []struct {
@@ -111,13 +134,13 @@ func TestApproximatelyEquals(t *testing.T) {
 		args args
 		want bool
 	}{
-		{name: "1", args: args{value1: 23, value2: 23.01, tolerance: 0.001}, want: false},
-		{name: "2", args: args{value1: 23, value2: 23.0001, tolerance: 0.001}, want: true},
+		{name: "1", args: args{v1: 23, v2: 23.01, tolerance: 0.001}, want: false},
+		{name: "2", args: args{v1: 23, v2: 23.0001, tolerance: 0.001}, want: true},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ApproximatelyEquals(tt.args.value1, tt.args.value2, tt.args.tolerance); got != tt.want {
-				t.Errorf("ApproximatelyEquals() = %v, want %v", got, tt.want)
+			if got := NearlyEqual(tt.args.v1, tt.args.v2, tt.args.tolerance); got != tt.want {
+				t.Errorf("NearlyEqual() = %v, want %v", got, tt.want)
 			}
 		})
 	}

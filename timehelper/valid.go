@@ -23,7 +23,7 @@ func ValidDate(year int, month time.Month, day int) error {
 
 // ValidClockTime checks if 'hour', 'min', 'sec' constitute a valid clock time.
 func ValidClockTime(hour, min, sec int) error {
-	if !(0 <= hour && hour <= 23) || !(0 <= min && min <= 59) || !(0 <= sec && sec <= 59) {
+	if !(0 <= hour && hour <= 23 && 0 <= min && min <= 59 && 0 <= sec && sec <= 59) {
 		return fmt.Errorf("invalid clock time '%d:%d:%d'", hour, min, sec)
 	}
 	return nil

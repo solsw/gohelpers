@@ -67,9 +67,11 @@ func TestValidClockTime(t *testing.T) {
 		args    args
 		wantErr bool
 	}{
-		{name: "1e", args: args{hour: -1, min: 34, sec: 56}, wantErr: true},
+		{name: "0e", args: args{hour: -1, min: -2, sec: -3}, wantErr: true},
+		{name: "1e", args: args{hour: 78, min: 34, sec: 56}, wantErr: true},
 		{name: "2e", args: args{hour: 12, min: 78, sec: 56}, wantErr: true},
 		{name: "3e", args: args{hour: 12, min: 34, sec: 60}, wantErr: true},
+		{name: "0", args: args{hour: 0, min: 0, sec: 0}},
 		{name: "1", args: args{hour: 12, min: 34, sec: 56}},
 	}
 	for _, tt := range tests {

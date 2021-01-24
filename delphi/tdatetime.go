@@ -2,8 +2,11 @@
 package delphi
 
 import (
+	"fmt"
 	"math"
 	"time"
+
+	"github.com/solsw/gohelpers/timehelper"
 )
 
 // TDateTime is Delphi's type to represent an instant in time.
@@ -33,4 +36,12 @@ func TimeToTDateTime(tt time.Time) TDateTime {
 	}
 	d, t := math.Modf(dt)
 	return d - 1 - (1 + t)
+}
+
+// EncodeDate returns a TDateTime value that represents a specified Year, Month and Day.
+func EncodeDate(Year, Month, Day int) (TDateTime, error) {
+	if !(0 <= Year && Year <= 9999 && 1 <= Month && Month <= 12 && 1 <= Day && Day <= timehelper.DaysInMonth(Year, time.Month(Month))) {
+		return -math.MaxFloat64, fmt.Errorf("invalid date '%d-%d-%d'", Year, Month, Day)
+	}
+	return TimeToTDateTime(timehelper.DateYMD(Year, time.Month(Month), Day)), nil
 }

@@ -16,6 +16,7 @@ func TestTDateTimeToTime(t *testing.T) {
 		args args
 		want string
 	}{
+		// http://docwiki.embarcadero.com/Libraries/Sydney/en/System.TDateTime
 		{name: "1", args: args{dt: 0}, want: "1899-12-30T00:00:00"},
 		{name: "2", args: args{dt: 2.75}, want: "1900-01-01T18:00:00"},
 		{name: "3", args: args{dt: 35065}, want: "1996-01-01T00:00:00"},

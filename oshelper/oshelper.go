@@ -103,7 +103,7 @@ func ExeDir() (string, error) {
 // If the value is empty 'def' is returned.
 func GetenvDef(key, def string) string {
 	r := os.Getenv(key)
-	if len(r) == 0 {
+	if r == "" {
 		return def
 	}
 	return r

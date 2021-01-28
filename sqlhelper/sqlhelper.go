@@ -7,12 +7,11 @@ import (
 
 // StrToNullStr converts string to sql.NullString.
 // If 's' is empty and 'emptyIsNULL' is true, 'ns.Valid' is false.
-func StrToNullStr(s string, emptyIsNULL bool) (ns sql.NullString) {
-	ns = sql.NullString{String: s}
-	if len(s) > 0 || !emptyIsNULL {
-		ns.Valid = true
+func StrToNullStr(s string, emptyIsNULL bool) sql.NullString {
+	return sql.NullString{
+		String: s,
+		Valid:  !(s == "" && emptyIsNULL),
 	}
-	return
 }
 
 // NullStrToStr converts sql.NullString to string.

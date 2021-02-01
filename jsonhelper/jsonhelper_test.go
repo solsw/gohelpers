@@ -54,3 +54,34 @@ func TestFormatStrToStrDefMust(t *testing.T) {
 		})
 	}
 }
+
+func TestFormatToStrDefMust(t *testing.T) {
+	type is struct {
+		I int
+		S string
+	}
+	type args struct {
+		v interface{}
+	}
+	tests := []struct {
+		name string
+		args args
+		want string
+	}{
+		{
+			name: "1",
+			args: args{v: is{1, "one"}},
+			want: `{
+  "I": 1,
+  "S": "one"
+}`,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := FormatToStrDefMust(tt.args.v); got != tt.want {
+				t.Errorf("FormatToStrDefMust() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

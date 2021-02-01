@@ -54,6 +54,35 @@ func FormatDef(r io.Reader, w io.Writer) error {
 	return Format(r, w, "", "  ")
 }
 
+// FormatToStr formats 'v' to string.
+// (See json.MarshalIndent for 'prefix' and 'indent' usage.)
+func FormatToStr(v interface{}, prefix, indent string) (string, error) {
+	bb, err := json.MarshalIndent(v, prefix, indent)
+	if err != nil {
+		return "", err
+	}
+	return string(bb), nil
+}
+
+// FormatToStrMust is like FormatToStr but panics in case of error.
+func FormatToStrMust(v interface{}, prefix, indent string) string {
+	s, err := FormatToStr(v, prefix, indent)
+	if err != nil {
+		panic(err)
+	}
+	return s
+}
+
+// FormatToStrDef calls FormatToStr with prefix="" and indent="  ".
+func FormatToStrDef(v interface{}) (string, error) {
+	return FormatToStr(v, "", "  ")
+}
+
+// FormatToStrDefMust is like FormatToStrDef but panics in case of error.
+func FormatToStrDefMust(v interface{}) string {
+	return FormatToStrMust(v, "", "  ")
+}
+
 // FormatStrToStr formats JSON-encoded 'json' to string.
 // (See json.MarshalIndent for 'prefix' and 'indent' usage.)
 func FormatStrToStr(json, prefix, indent string) (string, error) {

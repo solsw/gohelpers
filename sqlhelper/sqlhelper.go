@@ -6,7 +6,7 @@ import (
 )
 
 // StrToNullStr converts string to sql.NullString.
-// If 's' is empty and 'emptyIsNULL' is true, 'ns.Valid' is false.
+// If 's' is empty and 'emptyIsNULL' is true, result's Valid is false.
 func StrToNullStr(s string, emptyIsNULL bool) sql.NullString {
 	return sql.NullString{
 		String: s,

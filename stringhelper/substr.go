@@ -1,7 +1,7 @@
 package stringhelper
 
 import (
-	"errors"
+	"fmt"
 )
 
 // SubstrPrim retrieves a substring from 's' without error checking.
@@ -19,10 +19,10 @@ func SubstrPrim(s string, start, length int) string {
 // The substring starts at a 'start' rune position and has a specified 'length'.
 func Substr(s string, start, length int) (string, error) {
 	if start < 0 || length < 0 {
-		return "", errors.New("start and/or length is negative")
+		return "", fmt.Errorf("start (%d) and/or length (%d) is negative", start, length)
 	}
 	if start+length > len(s) {
-		return "", errors.New("start plus length is greater than string length")
+		return "", fmt.Errorf("start (%d) plus length (%d) is greater than string length (%d)", start, length, len(s))
 	}
 	return SubstrPrim(s, start, length), nil
 }
@@ -30,7 +30,7 @@ func Substr(s string, start, length int) (string, error) {
 // SubstrBeg retrieves a substring with a specified 'length' from the beginning of 's'.
 func SubstrBeg(s string, length int) (string, error) {
 	if length > len(s) {
-		return "", errors.New("length is greater than string length")
+		return "", fmt.Errorf("length (%d) is greater than string length (%d)", length, len(s))
 	}
 	return Substr(s, 0, length)
 }
@@ -38,7 +38,7 @@ func SubstrBeg(s string, length int) (string, error) {
 // SubstrEnd retrieves a substring with a specified 'length' from the end of 's'.
 func SubstrEnd(s string, length int) (string, error) {
 	if length > len(s) {
-		return "", errors.New("length is greater than string length")
+		return "", fmt.Errorf("length (%d) is greater than string length (%d)", length, len(s))
 	}
 	return Substr(s, len(s)-length, length)
 }
@@ -46,7 +46,7 @@ func SubstrEnd(s string, length int) (string, error) {
 // SubstrToEnd retrieves a substring from 'start' rune position and to the end of 's'.
 func SubstrToEnd(s string, start int) (string, error) {
 	if start > len(s) {
-		return "", errors.New("start is greater than string length")
+		return "", fmt.Errorf("start (%d) is greater than string length (%d)", start, len(s))
 	}
 	return Substr(s, start, len(s)-start)
 }

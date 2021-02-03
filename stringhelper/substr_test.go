@@ -31,11 +31,11 @@ func TestSubstr(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := Substr(tt.args.s, tt.args.start, tt.args.length)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("Substring() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("Substr() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if got != tt.want {
-				t.Errorf("Substring() = %v, want %v", got, tt.want)
+				t.Errorf("Substr() = %v, want %v", got, tt.want)
 			}
 		})
 	}

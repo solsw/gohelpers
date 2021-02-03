@@ -39,11 +39,13 @@ func TestDaysInMonth(t *testing.T) {
 		args args
 		want int
 	}{
+		{name: "0e", args: args{year: 1960, month: time.Month(0)}, want: -1},
+		{name: "1e", args: args{year: 1960, month: time.Month(100)}, want: -1},
 		{name: "0", args: args{year: 1960, month: time.June}, want: 30},
 		{name: "1", args: args{year: 2018, month: time.February}, want: 28},
 		{name: "2", args: args{year: 2020, month: time.February}, want: 29},
 		{name: "3", args: args{year: 2000, month: time.February}, want: 29},
-		{name: "4", args: args{year: 1900, month: time.February}, want: 28},
+		{name: "4", args: args{year: 1900, month: time.Month(2)}, want: 28},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

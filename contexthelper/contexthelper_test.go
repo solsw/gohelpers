@@ -29,6 +29,7 @@ func TestStringValue(t *testing.T) {
 			got, gotok := StringValue(tt.args.ctx, tt.args.key)
 			if got != tt.want {
 				t.Errorf("StringValue() got = %v, want %v", got, tt.want)
+				return
 			}
 			if gotok != tt.wantok {
 				t.Errorf("StringValue() gotok = %v, want %v", gotok, tt.wantok)

@@ -20,6 +20,10 @@ func TestFormatDef(t *testing.T) {
 		{name: "1e", args: args{r: &strings.Reader{}}, wantErr: true},
 		{name: "1", args: args{r: strings.NewReader(`{"i":1,"s":"string"}`)},
 			wantW: "{\n  \"i\": 1,\n  \"s\": \"string\"\n}\n"},
+		{name: "2", args: args{r: strings.NewReader(`[{"i":1,"s":"one"}]`)},
+			wantW: "[\n  {\n    \"i\": 1,\n    \"s\": \"one\"\n  }\n]\n"},
+		{name: "3", args: args{r: strings.NewReader(`[{"i":1,"s":"one"},{"i":2,"s":"two"}]`)},
+			wantW: "[\n  {\n    \"i\": 1,\n    \"s\": \"one\"\n  },\n  {\n    \"i\": 2,\n    \"s\": \"two\"\n  }\n]\n"},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

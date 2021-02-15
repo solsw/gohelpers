@@ -39,9 +39,8 @@ func MarshalIndentDefMust(v interface{}) []byte {
 // Format reads JSON-encoded data from 'r', then writes formatted data to 'w'.
 // (See json.MarshalIndent for 'prefix' and 'indent' usage.)
 func Format(r io.Reader, w io.Writer, prefix, indent string) error {
-	d := json.NewDecoder(r)
-	v := make(map[string]interface{})
-	if err := d.Decode(&v); err != nil {
+	var v interface{}
+	if err := json.NewDecoder(r).Decode(&v); err != nil {
 		return err
 	}
 	e := json.NewEncoder(w)

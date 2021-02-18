@@ -1,1 +1,3 @@
+setlocal
+set GO111MODULE=off
 go test ./...

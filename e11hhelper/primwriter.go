@@ -3,8 +3,8 @@ package e11hhelper
 import (
 	"bytes"
 
-	"github.com/elastic/go-elasticsearch"
-	"github.com/elastic/go-elasticsearch/esapi"
+	"github.com/elastic/go-elasticsearch/v7"
+	"github.com/elastic/go-elasticsearch/v7/esapi"
 )
 
 // PrimWriter writes to Elasticsearch index without any index options.

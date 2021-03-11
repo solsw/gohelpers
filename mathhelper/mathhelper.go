@@ -44,3 +44,25 @@ func Frac(x float64) float64 {
 func NearlyEqual(v1, v2, tolerance float64) bool {
 	return math.Abs(v1-v2) < tolerance
 }
+
+// Split4 splits sequence of ints (array indexes starting from 0 with length - 'len') into four parts.
+// The result array contains start indexes of the second, third and fourth parts (start index of the first part is 0).
+// Function is intended for splitting array for (parallel) processing of the separate parts.
+func Split4(len int) [3]int {
+	if len <= 0 {
+		return [3]int{0, 0, 0}
+	}
+	switch len {
+	case 1:
+		return [3]int{1, 1, 1}
+	case 2:
+		return [3]int{1, 2, 2}
+	case 3:
+		return [3]int{1, 2, 3}
+	default:
+		i2 := len / 2
+		i1 := i2 / 2
+		i3 := i2 + (len-i2)/2
+		return [3]int{i1, i2, i3}
+	}
+}

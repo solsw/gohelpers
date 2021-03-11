@@ -1,10 +1,13 @@
 package oshelper
 
 import (
+	"bufio"
 	"errors"
 	"fmt"
+	"io"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 // FileExistsFunc reports whether regular file 'filename' exists.
@@ -107,4 +110,43 @@ func GetenvDef(key, def string) string {
 		return def
 	}
 	return r
+}
+
+// ReadFileStrings reads the file 'name' and returns the contents as []string.
+func ReadFileStrings(name string) ([]string, error) {
+	f, err := os.Open(name)
+	if err != nil {
+		return nil, err
+	}
+	defer f.Close()
+	var r []string
+	s := bufio.NewScanner(f)
+	for s.Scan() {
+		r = append(r, s.Text())
+	}
+	return r, s.Err()
+}
+
+// WriteFileAll writes all contents of 'r' to the named file.
+// (See os.WriteFile for details.)
+func WriteFileAll(name string, r io.Reader, perm os.FileMode) error {
+	data, err := io.ReadAll(r)
+	if err != nil {
+		return err
+	}
+	return os.WriteFile(name, data, perm)
+}
+
+// WriteFileStringsNewLine writes 'ss' to the named file.
+// Each string (including the last one) is followed by 'newLine'.
+// (See os.WriteFile for details.)
+func WriteFileStringsNewLine(name string, ss []string, newLine string, perm os.FileMode) error {
+	return os.WriteFile(name, []byte(strings.Join(ss, newLine)+newLine), perm)
+}
+
+// WriteFileStrings writes 'ss' to the named file.
+// Each string (including the last one) is followed by oshelper.NewLine.
+// (See os.WriteFile for details.)
+func WriteFileStrings(name string, ss []string, perm os.FileMode) error {
+	return WriteFileStringsNewLine(name, ss, NewLine, perm)
 }

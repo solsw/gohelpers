@@ -5,7 +5,7 @@ import (
 )
 
 // SubstrPrim retrieves a substring from 's' without error checking.
-// The substring starts at a 'start' rune position and has a specified 'length'.
+// The substring starts at a 'start' rune position and has a specified rune 'length'.
 func SubstrPrim(s string, start, length int) string {
 	if length == 0 {
 		return ""
@@ -16,7 +16,7 @@ func SubstrPrim(s string, start, length int) string {
 }
 
 // Substr retrieves a substring from 's'.
-// The substring starts at a 'start' rune position and has a specified 'length'.
+// The substring starts at a 'start' rune position and has a specified rune 'length'.
 func Substr(s string, start, length int) (string, error) {
 	if start < 0 || length < 0 {
 		return "", fmt.Errorf("start (%d) and/or length (%d) is negative", start, length)
@@ -27,7 +27,7 @@ func Substr(s string, start, length int) (string, error) {
 	return SubstrPrim(s, start, length), nil
 }
 
-// SubstrBeg retrieves a substring with a specified 'length' from the beginning of 's'.
+// SubstrBeg retrieves a substring with a specified rune 'length' from the beginning of 's'.
 func SubstrBeg(s string, length int) (string, error) {
 	if length > len(s) {
 		return "", fmt.Errorf("length (%d) is greater than string length (%d)", length, len(s))
@@ -35,7 +35,7 @@ func SubstrBeg(s string, length int) (string, error) {
 	return Substr(s, 0, length)
 }
 
-// SubstrEnd retrieves a substring with a specified 'length' from the end of 's'.
+// SubstrEnd retrieves a substring with a specified rune 'length' from the end of 's'.
 func SubstrEnd(s string, length int) (string, error) {
 	if length > len(s) {
 		return "", fmt.Errorf("length (%d) is greater than string length (%d)", length, len(s))

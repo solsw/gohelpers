@@ -148,8 +148,11 @@ func MergeInt(ins ...chan int) <-chan int {
 	case 4:
 		return Merge4Int(ins[0], ins[1], ins[2], ins[3])
 	default:
-		h := len(ins) / 2
-		return Merge2Int(MergeInt(ins[:h]...), MergeInt(ins[h:]...))
+		half := len(ins) / 2
+		return Merge2Int(MergeInt(ins[:half]...), MergeInt(ins[half:]...))
+		// iii := mathhelper.Split4(len(ins))
+		// return Merge4Int(MergeInt(ins[:iii[0]]...), MergeInt(ins[iii[0]:iii[1]]...),
+		// 	MergeInt(ins[iii[1]:iii[2]]...), MergeInt(ins[iii[2]:]...))
 	}
 }
 

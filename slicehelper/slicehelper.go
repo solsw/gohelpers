@@ -122,3 +122,11 @@ func ShuffleCr(sl interface{}) interface{} {
 	}
 	return sl
 }
+
+func InsertAt(sl []interface{}, el interface{}, idx int) []interface{} {
+	var r []interface{}
+	r = append(r, sl[:idx]...)
+	r = append(r, el)
+	r = append(r, sl[idx:]...)
+	return r
+}

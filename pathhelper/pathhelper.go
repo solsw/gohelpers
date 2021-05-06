@@ -9,21 +9,11 @@ import (
 // SplitPath splits path 'p' (using slash as seperator) into directories and filename.
 // (E.g. "a/b/c.d" is splitted into {"a", "b", "c.d"} slice.)
 func SplitPath(p string) []string {
-	var t []string
-	d := path.Clean(p)
-	for len(d) > 0 {
-		var f string
-		d, f = path.Split(d)
-		if len(f) > 0 {
-			t = append(t, f)
-		}
-		d = strings.Trim(d, "/")
+	p = path.Clean(p)
+	if p == "." || p == "/" {
+		return []string{}
 	}
-	r := make([]string, 0, len(t))
-	for i := len(t) - 1; i >= 0; i-- {
-		r = append(r, t[i])
-	}
-	return r
+	return strings.Split(strings.Trim(p, "/"), "/")
 }
 
 // StartSlash returns path 'p' guaranteed to start with slash.

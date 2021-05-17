@@ -1,2 +1,3 @@
-// Package e11hhelper contains PrimWriter - io.Writer implementation, that writes to Elasticsearch index.
+// Package e11hhelper
+// contains PrimWriter and AsyncWriter - io.Writer implementations, that write to Elasticsearch index.
 package e11hhelper

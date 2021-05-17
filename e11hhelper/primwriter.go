@@ -7,9 +7,10 @@ import (
 	"github.com/elastic/go-elasticsearch/v7/esapi"
 )
 
-// PrimWriter writes to Elasticsearch index without any index options.
+// PrimWriter writes synchronously to Elasticsearch index without any index options.
 type PrimWriter struct {
 	// Client - Elasticsearch client.
+	// https://pkg.go.dev/github.com/elastic/go-elasticsearch/v7#Client
 	Client *elasticsearch.Client
 	// IdxName - name of Elasticsearch index to write to.
 	IdxName string
@@ -19,6 +20,7 @@ type PrimWriter struct {
 // Write implements the io.Writer interface.
 func (w *PrimWriter) Write(p []byte) (int, error) {
 	// https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-index_.html
+	// https://pkg.go.dev/github.com/elastic/go-elasticsearch/v7@v7.12.0/esapi#Index
 	var err error
 	w.res, err = w.Client.Index(w.IdxName, bytes.NewReader(p))
 	if err != nil {

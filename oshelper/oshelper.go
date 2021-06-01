@@ -140,7 +140,7 @@ func WriteFileAll(name string, r io.Reader, perm os.FileMode) error {
 // WriteFileStringsNewLine writes 'ss' to the named file.
 // Each string (including the last one) is followed by 'newLine'.
 // (See os.WriteFile for details.)
-func WriteFileStringsNewLine(name string, ss []string, newLine string, perm os.FileMode) error {
+func WriteFileStringsNewLine(name string, ss []string, perm os.FileMode, newLine string) error {
 	return os.WriteFile(name, []byte(strings.Join(ss, newLine)+newLine), perm)
 }
 
@@ -148,5 +148,5 @@ func WriteFileStringsNewLine(name string, ss []string, newLine string, perm os.F
 // Each string (including the last one) is followed by oshelper.NewLine.
 // (See os.WriteFile for details.)
 func WriteFileStrings(name string, ss []string, perm os.FileMode) error {
-	return WriteFileStringsNewLine(name, ss, NewLine, perm)
+	return WriteFileStringsNewLine(name, ss, perm, NewLine)
 }

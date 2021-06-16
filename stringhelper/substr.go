@@ -6,8 +6,9 @@ import (
 
 // SubstrPrim retrieves a substring from 's' without error checking.
 // The substring starts at a 'start' rune position and has a specified rune 'length'.
+// If 's' is empty or 'length' is zero, empty string is returned.
 func SubstrPrim(s string, start, length int) string {
-	if length == 0 {
+	if len(s) == 0 || length == 0 {
 		return ""
 	}
 	rr := make([]rune, length)

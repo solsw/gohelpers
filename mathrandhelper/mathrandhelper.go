@@ -15,14 +15,17 @@ func NewCryptoRand() *mathrand.Rand {
 	return mathrand.New(s)
 }
 
-// inspired by github.com/andrew-d/csmrand
+// cryptoRandSource implements the crypto/rand.Source interface.
 type cryptoRandSource struct {
+	// inspired by github.com/andrew-d/csmrand
 	byteReader io.ByteReader
 }
 
-func (r cryptoRandSource) Int63() int64 {
-	u64, _ := binary.ReadUvarint(r.byteReader)
+// Int63 implements the crypto/rand.Source.Int63 method.
+func (s cryptoRandSource) Int63() int64 {
+	u64, _ := binary.ReadUvarint(s.byteReader)
 	return int64(u64 >> 1)
 }
 
-func (r cryptoRandSource) Seed(int64) {}
+// Seed implements the crypto/rand.Source.Seed method.
+func (s cryptoRandSource) Seed(int64) {}

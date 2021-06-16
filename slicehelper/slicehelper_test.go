@@ -112,6 +112,60 @@ func TestContainsCmpMust(t *testing.T) {
 	}
 }
 
+func TestInsertAt(t *testing.T) {
+	type args struct {
+		sl  []interface{}
+		el  interface{}
+		idx int
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    []interface{}
+		wantErr bool
+	}{
+		{name: "1e",
+			wantErr: true,
+		},
+		{name: "2e",
+			args:    args{sl: []interface{}(nil)},
+			wantErr: true,
+		},
+		{name: "3e",
+			args:    args{sl: []interface{}{}},
+			wantErr: true,
+		},
+		{name: "4e",
+			args:    args{sl: []interface{}{1, 2}, idx: 2},
+			wantErr: true,
+		},
+		{name: "1",
+			args: args{sl: []interface{}{1, 2}, el: 0, idx: 0},
+			want: []interface{}{0, 1, 2},
+		},
+		{name: "2",
+			args: args{sl: []interface{}{1, 2, 3}, el: 4, idx: 1},
+			want: []interface{}{1, 4, 2, 3},
+		},
+		{name: "3",
+			args: args{sl: []interface{}{1, 2, 3}, el: 4, idx: 2},
+			want: []interface{}{1, 2, 4, 3},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := InsertAt(tt.args.sl, tt.args.el, tt.args.idx)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("InsertAt() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("InsertAt() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
 func TestRemoveAt(t *testing.T) {
 	var sl0 []interface{}
 	type args struct {

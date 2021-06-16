@@ -11,6 +11,7 @@ import (
 )
 
 // ConcatElSl returns new slice concatenating the element and the slice.
+// The slice may be empty.
 func ConcatElSl(el interface{}, sl []interface{}) []interface{} {
 	return append(append(make([]interface{}, 0, 1+len(sl)), el), sl...)
 }
@@ -69,6 +70,24 @@ func ContainsCmpMust(sl []interface{}, el interface{}, cmp func(interface{}, int
 	return r
 }
 
+// InsertAt inserts the element 'el' into the slice 'sl' at index 'idx'
+// returning a new slice. Index must be inside the slice.
+func InsertAt(sl []interface{}, el interface{}, idx int) ([]interface{}, error) {
+	if len(sl) == 0 {
+		return nil, errors.New("empty slice")
+	}
+	if idx < 0 || idx >= len(sl) {
+		return nil, errors.New("wrong index")
+	}
+	var r []interface{}
+	if idx > 0 {
+		r = append(r, sl[:idx]...)
+	}
+	r = append(r, el)
+	r = append(r, sl[idx:]...)
+	return r, nil
+}
+
 // RemoveAt removes element at 'idx' position from the slice returning new slice.
 func RemoveAt(sl []interface{}, idx int) ([]interface{}, error) {
 	if len(sl) == 0 {
@@ -92,7 +111,7 @@ func RemoveAt(sl []interface{}, idx int) ([]interface{}, error) {
 
 // RemoveAtInPlace removes element at 'idx' position from the slice in place.
 func RemoveAtInPlace(sl *[]interface{}, idx int) (*[]interface{}, error) {
-	if *sl == nil || len(*sl) == 0 {
+	if sl == nil || len(*sl) == 0 {
 		return nil, errors.New("empty slice")
 	}
 	if idx < 0 || idx >= len(*sl) {
@@ -108,7 +127,7 @@ func RemoveAtInPlace(sl *[]interface{}, idx int) (*[]interface{}, error) {
 }
 
 // ShuffleCr returns input slice shuffled the in place using crypto/rand package.
-// ShuffleCr panics (by means of reflect.Swapper), if the provided interface is not a slice.
+// ShuffleCr panics (by means of reflect.Swapper) if the provided interface is not a slice.
 func ShuffleCr(sl interface{}) interface{} {
 	sw := reflect.Swapper(sl)
 	len := reflect.ValueOf(sl).Len()
@@ -121,12 +140,4 @@ func ShuffleCr(sl interface{}) interface{} {
 		sw(i, int(j.Int64()))
 	}
 	return sl
-}
-
-func InsertAt(sl []interface{}, el interface{}, idx int) []interface{} {
-	var r []interface{}
-	r = append(r, sl[:idx]...)
-	r = append(r, el)
-	r = append(r, sl[idx:]...)
-	return r
 }

@@ -7,7 +7,8 @@ import (
 	"time"
 )
 
-// OrContext combines two context.Contexts into one and implements the context.Context interface.
+// OrContext combines two context.Contexts with 'or' semantics (see Done method).
+// OrContext implements the context.Context interface.
 type OrContext struct {
 	Ctx1, Ctx2   context.Context
 	onceDeadline sync.Once
@@ -19,7 +20,9 @@ type OrContext struct {
 	err          error
 }
 
-// NewOrContext combines two context.Contexts into one.
+var _ context.Context = &OrContext{}
+
+// NewOrContext returns a new OrContext.
 func NewOrContext(ctx1, ctx2 context.Context) *OrContext {
 	return &OrContext{Ctx1: ctx1, Ctx2: ctx2}
 }

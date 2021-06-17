@@ -7,6 +7,7 @@ import (
 	"time"
 )
 
+// AndContext combines two context.Contexts with 'and' semantics (see Done method).
 // AndContext implements the context.Context interface.
 type AndContext struct {
 	Ctx1, Ctx2   context.Context
@@ -19,7 +20,9 @@ type AndContext struct {
 	err          error
 }
 
-// NewAndContext combines two context.Contexts into one.
+var _ context.Context = &AndContext{}
+
+// NewAndContext returns a new AndContext.
 func NewAndContext(ctx1, ctx2 context.Context) *AndContext {
 	return &AndContext{Ctx1: ctx1, Ctx2: ctx2}
 }

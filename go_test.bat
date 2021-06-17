@@ -1,2 +1,6 @@
-setlocal
 go test ./...
+
+pushd
+cd contexthelper
+go test ./...
+popd

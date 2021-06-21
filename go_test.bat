@@ -1,6 +1,5 @@
 go test ./...
 
-pushd
-cd contexthelper
+pushd contexthelper
 go test ./...
 popd
